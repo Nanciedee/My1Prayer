@@ -208,6 +208,20 @@
             ></textarea>
         </div>
 
+        <!-- Mood Assessment Section (Updated) -->
+        <div class="space-y-2">
+            <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
+                <span class="text-indigo-500 mr-2">😊</span> <span id="mood-assessment-title">How are you feeling today?</span>
+            </h2>
+            <p class="text-gray-600 text-sm mb-2" id="mood-instructions">Choose up to 4 emojis that represent your current mood:</p>
+            <div id="mood-picker-container" class="grid grid-cols-5 gap-2 justify-items-center p-2 bg-gray-50 rounded-md border border-gray-200">
+                <!-- Mood emojis will be dynamically inserted here by JavaScript -->
+            </div>
+            <div id="selected-moods-display" class="mt-2 text-3xl text-center">
+                <!-- Selected moods will appear here -->
+            </div>
+        </div>
+
         <!-- Gratitude Prompt Section - Placeholder will be updated by JavaScript -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
@@ -240,7 +254,7 @@
 
             <p class="text-gray-600 text-sm mb-2" id="action-instructions">Choose up to 4 action steps to focus on today:</p>
             <div id="action-step-picker-container" class="flex flex-wrap gap-2 justify-center p-2 bg-gray-50 rounded-md border border-gray-200">
-                <!-- Action steps will be dynamically inserted here by JavaScript -->
+                <!-- Action steps will be dynamically inserted here -->
             </div>
             <div id="selected-action-steps-display" class="mt-2 text-base text-center font-medium text-gray-700">
                 <!-- Selected action steps will appear here -->
@@ -297,8 +311,9 @@
         // No Firebase imports needed for local storage
 
         let currentLanguage = 'en'; // Default language
-        let selectedEmojis = []; // Stores the actual emoji characters
+        let selectedEmojis = []; // Stores the actual emoji characters for gratitude
         let selectedActionSteps = []; // Stores the actual action step phrases
+        let selectedMoods = []; // Stores the actual emoji characters for mood assessment
         let currentDate = new Date(); // Tracks the currently displayed date
 
         // --- Canvas Drawing Variables ---
@@ -320,13 +335,27 @@
         ];
 
         const allEmojis = [
-            "😊", "💖", "☀️", "🌳", "🏡", "🫂", "🙏", "💡", "💧", "📚",
+            "😊", "�", "☀️", "🌳", "🏡", "🫂", "🙏", "💡", "💧", "📚",
             "🎶", "🎨", "🌟", "💪", "🍎", "🕊️", "🎁", "✨", "🌈", "☕"
         ];
 
-        // New object to store emoji names in both languages
+        // NEW: Mood Emojis for the mood assessment section
+        const moodEmojis = [
+            { emoji: '🤩', description: 'excited' },
+            { emoji: '✨', description: 'optimistic' },
+            { emoji: '💛', description: 'grateful' },
+            { emoji: '🎯', description: 'determined' },
+            { emoji: '😄', description: 'joyful' },
+            { emoji: '😔', description: 'sad' },
+            { emoji: '😐', description: 'neutral' },
+            { emoji: '😡', description: 'mad' },
+            { emoji: '😴', description: 'tired' },
+            { emoji: '🤒', description: 'sick' }
+        ];
+
+        // New object to store emoji names in both languages (combined for both gratitude and mood)
         const emojiNames = {
-            "😊": { en: "joy", fr: "joie" },
+            "😊": { en: "happy", fr: "heureux" },
             "💖": { en: "love", fr: "amour" },
             "☀️": { en: "sun", fr: "soleil" },
             "🌳": { en: "nature", fr: "nature" },
@@ -343,9 +372,19 @@
             "🍎": { en: "health", fr: "santé" },
             "🕊️": { en: "peace", fr: "paix" },
             "🎁": { en: "gift", fr: "cadeau" },
-            "✨": { en: "sparkle", fr: "éclat" },
+            "✨": { en: "sparkle", fr: "éclat" }, // Reused for optimistic
             "🌈": { en: "hope", fr: "espoir" },
-            "☕": { en: "comfort", fr: "confort" }
+            "☕": { en: "comfort", fr: "confort" },
+            // NEW Mood Emojis
+            "🤩": { en: "excited", fr: "excité" },
+            "💛": { en: "grateful", fr: "reconnaissant" }, // Reused for grateful
+            "🎯": { en: "determined", fr: "déterminé" },
+            "😄": { en: "joyful", fr: "joyeux" },
+            "😔": { en: "sad", fr: "triste" },
+            "😐": { en: "neutral", fr: "neutre" },
+            "😡": { en: "mad", fr: "en colère" },
+            "😴": { en: "tired", fr: "fatigué" },
+            "🤒": { en: "sick", fr: "malade" }
         };
 
         const allActionSteps = [
@@ -379,7 +418,7 @@
             { name: { en: "Night (Moon)", fr: "Nuit (Lune)" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.12-1.36a5.5 5.5 0 01-1.84-8.88C19.1 3.51 15.7 2 12 2z" fill="#FFD700"/><circle cx="18" cy="6" r="1.5" fill="#FFFFFF"/><circle cx="15" cy="3" r="1" fill="#FFFFFF"/><circle cx="21" cy="10" r="1" fill="#FFFFFF"/></svg>' },
 
             // Season Icons (similar to image_e56cdc.png)
-            { name: { en: "Summer", fr: "Été" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="summerSunGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFC107"/><stop offset="100%" stop-color="#FF8F00"/></linearGradient></defs><circle cx="12" cy="12" r="6" fill="url(#summerSunGrad)"/><path d="M12 2v2m0 16v2m8-10h2M2 12h2m14.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 6.05l1.414-1.414M6.05 6.05L4.636 4.636" stroke="#FF8F00" stroke-width="1.5" stroke-linecap="round"/></svg>' },
+            { name: { en: "Summer", fr: "Été" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="summerSunGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFC107"/><stop offset="100%" stop-color="#FF8F00"/></linearGradient></defs><circle cx="12" cy="12" r="6" fill="url(#summerSunGrad)"/><path d="M12 2v2m0 16v2m8-10h2M2 12h2m14.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 6.05l1.414-1.414M6.05 6.05L4.636 4.636" stroke="#FF8C00" stroke-width="1.5" stroke-linecap="round"/></svg>' },
             { name: { en: "Spring", fr: "Printemps" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="#9CCC65"/><path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#FF69B4" stroke="#C2185B" stroke-width="1.5"/></svg>' },
             { name: { en: "Autumn", fr: "Automne" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.41 6.59c-.39-.39-1.02-.39-1.41 0L12 10.59 8.01 6.59c-.39-.39-1.02-.39-1.41 0s-.39 1.02 0 1.41L10.59 12 6.59 15.99c-.39.39-.39 1.02 0 1.41s1.02.39 1.41 0L12 13.41l3.99 3.99c.39.39 1.02.39 1.41 0s.39-1.02 0-1.41L13.41 12l3.99-3.99c.39-.39.39-1.02 0-1.41z" fill="#FFA500" stroke="#E65100" stroke-width="1.5"/><path d="M12 13.41l-1.5-1.5-1.5 1.5-1.5-1.5-1.5 1.5-1.5-1.5L6.59 12 12 6.59 17.41 12 12 17.41z" fill="#D2691E"/></svg>' },
             { name: { en: "Winter", fr: "Hiver" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM12 8a4 4 0 100 8 4 4 0 000-8z" fill="#ADD8E6" stroke="#64B5F6" stroke-width="1.5"/><path d="M12 8v8m-4-4h8m-4-4l2 4m-2 0l-2-4" stroke="#64B5F6" stroke-width="1.5" stroke-linecap="round"/></svg>' }
@@ -395,6 +434,8 @@
                 verseReflectionPlaceholder: "Write your thoughts here",
                 personalPrayerTitle: "Personal Prayer",
                 personalPrayerSubtitle: "Talk to God about your hopes and needs today. Here's a suggestion to inspire you:",
+                moodAssessmentTitle: "How are you feeling today?", // NEW
+                moodInstructions: "Choose up to 4 emojis that represent your current mood:", // NEW
                 gratitudeTitle: "Gratitude Prompt",
                 gratitudeSubtitle: "Today, I am thankful for...",
                 emojiInstructions: "Choose up to 4 emojis that represent your gratitude today:",
@@ -642,6 +683,8 @@
                 verseReflectionPlaceholder: "Écrivez vos pensées ici",
                 personalPrayerTitle: "Prière Personnelle",
                 personalPrayerSubtitle: "Parlez à Dieu de vos espoirs et de vos besoins aujourd'hui. Voici une suggestion pour vous inspirer :",
+                moodAssessmentTitle: "Comment vous sentez-vous aujourd'hui ?", // NEW
+                moodInstructions: "Choisissez jusqu'à 4 émojis qui représentent votre humeur actuelle :", // NEW
                 gratitudeTitle: "Invite à la Gratitude",
                 gratitudeSubtitle: "Aujourd'hui, je suis reconnaissant(e) pour...",
                 emojiInstructions: "Choisissez jusqu'à 4 émojis qui représentent votre gratitude aujourd'hui :",
@@ -759,42 +802,42 @@
                     },
                     // Jour 15
                     {
-                        scripture: { text: "Je vous donne un commandement nouveau: Aimez-vous les uns les autres; comme je vous ai aimés, vous aussi, aimez-vous les uns les autres.", reference: "Jean 13:34" },
+                        scripture: { text: "A new command I give you: Love one another. As I have loved you, so you must love one another.", reference: "John 13:34" },
                         reminder: "L'amour est une action, un choix quotidien.",
                         spiritualChallengeTheme: "Amour en Action",
                         spiritualChallengePrompt: "Comment pouvez-vous activement démontrer de l'amour à quelqu'un dans votre vie aujourd'hui ?"
                     },
                     // Jour 16
                     {
-                        scripture: { text: "Soyez joyeux dans l'espérance, patients dans l'affliction, persévérants dans la prière.", reference: "Romains 12:12" },
+                        scripture: { text: "Be joyful in hope, patient in affliction, faithful in prayer.", reference: "Romans 12:12" },
                         reminder: "L'espérance alimente la joie, la patience renforce la détermination, la prière vous connecte à la puissance.",
                         spiritualChallengeTheme: "Joie, Patience, Prière",
                         spiritualChallengePrompt: "Lequel de ces trois domaines (espérance, patience, prière) a besoin de votre attention aujourd'hui ?"
                     },
                     // Jour 17
                     {
-                        scripture: { text: "Car ce n'est pas un esprit de timidité que Dieu nous a donné, mais un esprit de force, d'amour et de sagesse.", reference: "2 Timothée 1:7" },
+                        scripture: { text: "For God did not give us a spirit of timidity, but a spirit of power, of love and of a sound mind.", reference: "2 Timothy 1:7" },
                         reminder: "Vous êtes équipé de puissance, d'amour et d'un esprit sain.",
                         spiritualChallengeTheme: "Courage et Clarté",
                         spiritualChallengePrompt: "Où devez-vous agir avec puissance, amour ou un esprit sain aujourd'hui ?"
                     },
                     // Jour 18
                     {
-                        scripture: { text: "L'Éternel est bon, il est un refuge au jour de la détresse; il connaît ceux qui se confient en lui.", reference: "Nahum 1:7" },
+                        scripture: { text: "The Lord is good, a stronghold in the day of trouble; He knows those who take refuge in Him.", reference: "Nahum 1:7" },
                         reminder: "Dans les moments difficiles, Dieu est votre refuge sûr.",
                         spiritualChallengeTheme: "Refuge et Sécurité",
                         spiritualChallengePrompt: "Quels problèmes rencontrez-vous ? Comment pouvez-vous trouver refuge en Dieu aujourd'hui ?"
                     },
                     // Jour 19
                     {
-                        scripture: { text: "Je vous ai dit ces choses, afin que vous ayez la paix en moi. Dans le monde, vous aurez des tribulations. Mais prenez courage, j'ai vaincu le monde.", reference: "Jean 16:33" },
+                        scripture: { text: "I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.", reference: "John 16:33" },
                         reminder: "Les troubles sont inévitables, mais la paix est possible par le Christ.",
                         spiritualChallengeTheme: "Vaincre le Trouble",
                         spiritualChallengePrompt: "Quel défi vous semble insurmontable ? Comment pouvez-vous trouver la paix dans la victoire du Christ ?"
                     },
                     // Jour 20
                     {
-                        scripture: { text: "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu, de ceux qui sont appelés selon son dessein.", reference: "Romains 8:28" },
+                        scripture: { text: "And we know that in all things God works for the good of those who love Him, who have been called according to His purpose.", reference: "Romans 8:28" },
                         reminder: "Même dans des circonstances difficiles, Dieu œuvre pour votre bien.",
                         spiritualChallengeTheme: "But et Bonté",
                         spiritualChallengePrompt: "Comment pouvez-vous voir le dessein de Dieu se dérouler même dans des situations inattendues aujourd'hui ?"
@@ -808,7 +851,7 @@
                     },
                     // Jour 22
                     {
-                        scripture: { text: "Ne vous inquiétez de rien; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces.", reference: "Philippiens 4:6" },
+                        scripture: { text: "Ne vous inquiétez de rien; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces.", reference: "Philippians 4:6" },
                         reminder: "Échangez votre anxiété contre la prière et l'action de grâce.",
                         spiritualChallengeTheme: "Anxiété et Prière",
                         spiritualChallengePrompt: "Quelle anxiété pouvez-vous transformer en prière d'action de grâce aujourd'hui ?"
@@ -876,7 +919,7 @@
                     // Semaine 2
                     "Seigneur, je viens devant Toi cette semaine cherchant Ta paix au milieu de toutes les anxiétés. Sois ma lumière et ma forteresse. Accorde-moi le courage d'affronter les défis et la grâce de me reposer dans Ton amour infaillible. Que Ton réconfort remplisse mon cœur. Amen.",
                     // Semaine 3
-                    "Dieu bienveillant, je prie pour une force renouvelée et une nouvelle perspective alors que j'avance dans cette semaine. Aide-moi à espérer en Toi, sachant que Tu me relèveras et me permettras de surmonter la fatigue. Accorde-moi la patience d'attendre Ton timing et de voir Ta main en toutes choses. Amen.",
+                    "Gracious God, je prie pour une force renouvelée et une nouvelle perspective alors que j'avance dans cette semaine. Aide-moi à espérer en Toi, sachant que Tu me relèveras et me permettras de surmonter la fatigue. Accorde-moi la patience d'attendre Ton timing et de voir Ta main en toutes choses. Amen.",
                     // Semaine 4
                     "Père miséricordieux, cette semaine, je cherche Ton pardon et Ton renouveau. Purifie mon cœur et renouvelle un esprit ferme en moi. Aide-moi à marcher avec intégrité, à faire preuve de compassion envers les autres et à refléter Ton amour illimité dans tout ce que je fais. Amen."
                 ]
@@ -1080,14 +1123,14 @@
 
 
         /**
-         * Updates the display area with the currently selected emojis.
+         * Updates the display area with the currently selected emojis (for gratitude).
          */
         const updateSelectedEmojisDisplay = () => {
             document.getElementById('selected-emojis-display').textContent = selectedEmojis.join(' ');
         };
 
         /**
-         * Toggles the selection of an emoji and updates the display.
+         * Toggles the selection of an emoji and updates the display (for gratitude).
          * @param {string} emoji - The emoji character to toggle.
          * @param {HTMLElement} button - The button element corresponding to the emoji.
          */
@@ -1114,7 +1157,7 @@
         };
 
         /**
-         * Generates and renders all emoji buttons in the picker container.
+         * Generates and renders all emoji buttons in the picker container (for gratitude).
          * Attaches click listeners and sets initial styling based on selection.
          */
         const generateEmojiButtons = () => {
@@ -1150,6 +1193,79 @@
                 emojiContainer.appendChild(emojiItemDiv);
             });
         };
+
+        /**
+         * Updates the display area with the currently selected moods.
+         */
+        const updateSelectedMoodsDisplay = () => {
+            document.getElementById('selected-moods-display').textContent = selectedMoods.join(' ');
+        };
+
+        /**
+         * Toggles the selection of a mood emoji and updates the display.
+         * @param {string} emoji - The emoji character to toggle.
+         * @param {HTMLElement} button - The button element corresponding to the emoji.
+         */
+        const toggleMoodEmojiSelection = (emoji, button) => {
+            const index = selectedMoods.indexOf(emoji);
+            if (index > -1) {
+                // Emoji is already selected, so unselect it
+                selectedMoods.splice(index, 1);
+                button.classList.remove('bg-blue-200', 'border-blue-500');
+                button.classList.add('bg-gray-100', 'border-gray-300');
+            } else {
+                // Emoji is not selected, try to select it
+                if (selectedMoods.length < 4) {
+                    // Only allow selection if less than 4 emojis are already selected
+                    selectedMoods.push(emoji);
+                    button.classList.add('bg-blue-200', 'border-blue-500');
+                    button.classList.remove('bg-gray-100', 'border-gray-300');
+                } else {
+                    // Optionally, provide user feedback that max selection is reached
+                    return;
+                }
+            }
+            updateSelectedMoodsDisplay(); // Update the display of selected moods
+        };
+
+        /**
+         * Generates and renders all mood emoji buttons in the mood picker container.
+         * Attaches click listeners and sets initial styling based on selection.
+         */
+        const generateMoodEmojiButtons = () => {
+            const moodPickerContainer = document.getElementById('mood-picker-container');
+            moodPickerContainer.innerHTML = ''; // Clear any existing buttons
+
+            moodEmojis.forEach(mood => {
+                const moodItemDiv = document.createElement('div');
+                moodItemDiv.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'p-1', 'rounded-md'); // Container for emoji and name
+
+                const button = document.createElement('button');
+                button.textContent = mood.emoji;
+                button.classList.add(
+                    'emoji-button', 'p-2', 'rounded-full', 'text-2xl', 'border-2',
+                    'transition', 'duration-150', 'ease-in-out', 'hover:scale-110'
+                );
+                // Set initial styling based on whether the emoji is currently selected
+                if (selectedMoods.includes(mood.emoji)) {
+                    button.classList.add('bg-blue-200', 'border-blue-500');
+                } else {
+                    button.classList.add('bg-gray-100', 'border-gray-300');
+                }
+                // Add click event listener to toggle selection
+                button.addEventListener('click', () => toggleMoodEmojiSelection(mood.emoji, button));
+
+                const moodNameSpan = document.createElement('span');
+                moodNameSpan.classList.add('text-xs', 'text-gray-600', 'mt-1', 'text-center', 'emoji-name');
+                // Ensure emojiNames[mood.emoji] exists before trying to access properties
+                moodNameSpan.textContent = emojiNames[mood.emoji] ? emojiNames[mood.emoji][currentLanguage] : '';
+
+                moodItemDiv.appendChild(button);
+                moodItemDiv.appendChild(moodNameSpan);
+                moodPickerContainer.appendChild(moodItemDiv);
+            });
+        };
+
 
         /**
          * Updates the display area with the currently selected action steps.
@@ -1245,8 +1361,11 @@
             document.getElementById('gratitude-textarea').value = '';
             selectedEmojis = [];
             selectedActionSteps = [];
+            selectedMoods = []; // Clear selected moods
             drawingActions = []; // Clear drawing actions
             updateSelectedEmojisDisplay();
+            updateSelectedMoodsDisplay(); // Update mood display
+            generateMoodEmojiButtons(); // Re-render mood buttons to clear selections
             generateActionStepButtons(); // Re-render action buttons to clear selections
             redrawCanvas(); // Clear the visual canvas
         };
@@ -1285,13 +1404,15 @@
                 gratitudeText: document.getElementById('gratitude-textarea').value,
                 selectedEmojis: selectedEmojis,
                 selectedActionSteps: selectedActionSteps,
+                selectedMoods: selectedMoods, // Save selected moods
                 drawingActions: drawingActions // Store the array of drawing commands
             };
 
             try {
                 localStorage.setItem(`journal_entry_${dateString}`, JSON.stringify(entryData));
                 showStatusMessage("Entry saved successfully to local storage!", 'success');
-            } catch (e) {
+            }
+            catch (e) {
                 console.error("Error saving to local storage: ", e);
                 showStatusMessage("Error saving entry to local storage.", 'error');
             }
@@ -1318,10 +1439,13 @@
                     document.getElementById('gratitude-textarea').value = data.gratitudeText || '';
                     selectedEmojis = data.selectedEmojis || [];
                     selectedActionSteps = data.selectedActionSteps || [];
+                    selectedMoods = data.selectedMoods || []; // Load selected moods
                     drawingActions = data.drawingActions || []; // Load drawing actions
                     
                     updateSelectedEmojisDisplay();
-                    generateActionStepButtons(); // Re-render to show loaded selections
+                    updateSelectedMoodsDisplay(); // Update mood display
+                    generateMoodEmojiButtons(); // Re-render to show loaded mood selections
+                    generateActionStepButtons(); // Re-render to show loaded action selections
                     redrawCanvas(); // Redraw canvas with loaded actions
 
                     showStatusMessage("Entry loaded from local storage.", 'success');
@@ -1332,7 +1456,7 @@
                 updateContent(currentLanguage); // Update daily content for the new date
             } catch (e) {
                 console.error("Error loading from local storage: ", e);
-                showStatusMessage("Error loading entry from local storage.", 'error');
+                showStatusMessage("Error loading reflection: " + e.message, 'error');
             }
         };
 
@@ -1357,6 +1481,8 @@
             document.getElementById('verse-reflection-textarea').placeholder = content[lang].verseReflectionPlaceholder;
             document.getElementById('personal-prayer-title').textContent = content[lang].personalPrayerTitle;
             document.getElementById('personal-prayer-subtitle').textContent = content[lang].personalPrayerSubtitle;
+            document.getElementById('mood-assessment-title').textContent = content[lang].moodAssessmentTitle; // NEW
+            document.getElementById('mood-instructions').textContent = content[lang].moodInstructions; // NEW
             document.getElementById('gratitude-title').textContent = content[lang].gratitudeTitle;
             document.getElementById('gratitude-subtitle').textContent = content[lang].gratitudeSubtitle;
             document.getElementById('emoji-instructions').textContent = content[lang].emojiInstructions; // New emoji instructions
@@ -1388,7 +1514,7 @@
 
             const spiritualChallengeFullTitleElement = document.getElementById('spiritual-challenge-full-title');
             if (spiritualChallengeFullTitleElement) {
-                spiritualChallengeFullTitleElement.textContent = content[lang].spiritualChallengeTitle + " " + dailyData.spiritualChallengeTheme;
+                spiritualChallengeFullTitleElement.textContent = content[lang].spiritualChallengeTheme + ": " + dailyData.spiritualChallengeTheme;
             } else {
                 console.error("Element with ID 'spiritual-challenge-full-title' not found.");
             }
@@ -1404,6 +1530,10 @@
             // Re-generate emoji buttons to ensure correct styling for selected/unselected states and update names
             generateEmojiButtons();
             updateSelectedEmojisDisplay(); // Ensure selected emojis are displayed after content update
+
+            // Re-generate mood emoji buttons to ensure correct styling for selected/unselected states and update names
+            generateMoodEmojiButtons();
+            updateSelectedMoodsDisplay(); // Ensure selected moods are displayed after content update
 
             // Re-generate action step buttons to ensure correct styling and language
             generateActionStepButtons();
@@ -1440,6 +1570,7 @@
 
             // Generate buttons and update all content based on the initial language
             generateEmojiButtons();
+            generateMoodEmojiButtons(); // Generate mood emoji buttons on load
             generateActionStepButtons(); // Generate action step buttons on load
             generatePresetIconButtons(); // Generate preset icon buttons on load
             
@@ -1475,3 +1606,4 @@
     </script>
 </body>
 </html>
+�

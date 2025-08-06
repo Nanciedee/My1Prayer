@@ -16,15 +16,42 @@
             resize: vertical; /* Allow vertical resizing */
             min-height: 80px; /* Minimum height for text areas */
         }
+        /* Style for the scripture text to give it a distinct look */
+        .scripture-text {
+            font-family: 'Georgia', serif; /* A classic, elegant font */
+            font-size: 1.25rem; /* Larger text */
+            font-weight: 600; /* Semi-bold */
+            color: #3b5d46; /* A deep green for a natural feel */
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .scripture-reference {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-align: center;
+            font-style: italic;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-8 rounded-lg shadow-xl max-w-2xl w-full space-y-6 border border-gray-200">
         <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-6">🌅 Morning Reflection</h1>
 
-        <!-- Reminder Section -->
+        <!-- Reminder Section - Content will be updated by JavaScript -->
         <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-800 p-4 rounded-md shadow-sm">
-            <p class="font-semibold">Reminder: You are not walking alone. God is lighting the path, even when it curves.</p>
+            <p class="font-semibold" id="daily-reminder">Reminder: You are not walking alone. God is lighting the path, even when it curves.</p>
+        </div>
+
+        <!-- Scripture of the Day Section -->
+        <div class="space-y-2">
+            <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
+                <span class="text-yellow-500 mr-2">📖</span> Scripture of the Day
+            </h2>
+            <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                <p class="scripture-text" id="scripture-text"></p>
+                <p class="scripture-reference" id="scripture-reference"></p>
+            </div>
         </div>
 
         <!-- Verse Reflection Section -->
@@ -43,26 +70,28 @@
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
                 <span class="text-purple-500 mr-2">🙏</span> Personal Prayer
             </h2>
-            <p class="text-gray-600 text-sm">Talk to God about your hopes and needs today.</p>
+            <p class="text-gray-600 text-sm">Talk to God about your hopes and needs today. Here's a suggestion to inspire you:</p>
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
-                placeholder="Write your prayer here"
+                id="prayer-textarea"
+                placeholder="Heavenly Father, on this Monday, I come before You seeking strength and guidance. Help me to trust in Your wisdom completely, even when I don't understand Your plan. Guide my steps today and make my path straight according to Your will. Amen."
             ></textarea>
         </div>
 
-        <!-- Spiritual Challenge Section -->
+        <!-- Spiritual Challenge Section - Placeholder will be updated by JavaScript -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-green-500 mr-2">🌱</span> Spiritual Challenge of the Day: TRUST
+                <span class="text-green-500 mr-2">🌱</span> Spiritual Challenge of the Day: <span id="challenge-theme" class="ml-1">TRUST</span>
             </h2>
-            <p class="text-gray-600 text-sm">Where am I being called to trust God more fully today?</p>
+            <p class="text-gray-600 text-sm" id="challenge-prompt">Where am I being called to trust God more fully today?</p>
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
+                id="spiritual-challenge-textarea"
                 placeholder="Reflect and write here"
             ></textarea>
         </div>
 
-        <!-- Gratitude Prompt Section -->
+        <!-- Gratitude Prompt Section - Placeholder will be updated by JavaScript -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
                 <span class="text-pink-500 mr-2">💛</span> Gratitude Prompt
@@ -70,11 +99,12 @@
             <p class="text-gray-600 text-sm">Today, I am thankful for...</p>
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
+                id="gratitude-textarea"
                 placeholder="Write your list here"
             ></textarea>
         </div>
 
-        <!-- Action Step Section -->
+        <!-- Action Step Section - Placeholder will be updated by JavaScript -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
                 <span class="text-red-500 mr-2">📌</span> Action Step
@@ -82,6 +112,7 @@
             <p class="text-gray-600 text-sm">One way I will live out today’s verse is...</p>
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
+                id="action-step-textarea"
                 placeholder="Write your action here"
             ></textarea>
         </div>
@@ -97,5 +128,124 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const today = new Date();
+            const dayName = days[today.getDay()]; // Get current day name
+
+            const dailyContent = {
+                "Monday": {
+                    scripture: {
+                        text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight.",
+                        reference: "Proverbs 3:5-6"
+                    },
+                    prayerSuggestion: "Heavenly Father, on this Monday, I come before You seeking strength and guidance. Help me to trust in Your wisdom completely, even when I don't understand Your plan. Guide my steps today and make my path straight according to Your will. Amen.",
+                    reminder: "Peace isn’t the absence of fear—it’s the presence of God.",
+                    spiritualChallengeTheme: "STRENGTH & GUIDANCE",
+                    spiritualChallengePrompt: "Consider a specific area where you tend to rely on your own understanding. How can you intentionally surrender that to God today?",
+                    gratitudeSuggestion: "Think of three things that represent God's guidance in your life.",
+                    actionStepSuggestion: "Choose one task today where you will consciously rely on God's strength instead of your own."
+                },
+                "Tuesday": {
+                    scripture: {
+                        text: "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?",
+                        reference: "Psalm 27:1"
+                    },
+                    prayerSuggestion: "Lord, today I seek Your peace and comfort. Be my light in any darkness and my salvation from all fear. I declare You as the stronghold of my life. Help me to walk in courage and find rest in Your presence. Amen.",
+                    reminder: "Waiting isn’t wasting—it’s preparing.",
+                    spiritualChallengeTheme: "PEACE & COMFORT",
+                    spiritualChallengePrompt: "Identify a situation causing you anxiety. How can you invite God's peace into it?",
+                    gratitudeSuggestion: "List ways God has brought comfort into your life recently.",
+                    actionStepSuggestion: "Practice a moment of stillness today, intentionally focusing on God's presence as your source of peace."
+                },
+                "Wednesday": {
+                    scripture: {
+                        text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",
+                        reference: "Isaiah 40:31"
+                    },
+                    prayerSuggestion: "Gracious God, as I face this Wednesday, I pray for renewed strength and fresh perspective. Help me to hope in You, knowing that You will lift me up and enable me to overcome weariness. Grant me the patience to wait on Your timing. Amen.",
+                    reminder: "Renewal begins with release.",
+                    spiritualChallengeTheme: "PATIENCE & PERSPECTIVE",
+                    spiritualChallengePrompt: "What is one area where you need to release control and trust God's timing?",
+                    gratitudeSuggestion: "Reflect on a time when God renewed your strength or gave you a new perspective.",
+                    actionStepSuggestion: "Today, try to approach a challenging situation with a renewed sense of hope and patience."
+                },
+                "Thursday": {
+                    scripture: {
+                        text: "Create in me a pure heart, O God, and renew a steadfast spirit within me.",
+                        reference: "Psalm 51:10"
+                    },
+                    prayerSuggestion: "Merciful Father, on this Thursday, I come seeking Your forgiveness and renewal. Cleanse my heart and renew a steadfast spirit within me. Help me to walk in integrity and to reflect Your purity in all I do. Amen.",
+                    reminder: "Every act of compassion is a reflection of God’s love.",
+                    spiritualChallengeTheme: "FORGIVENESS & RENEWAL",
+                    spiritualChallengePrompt: "Is there anyone you need to forgive, or an area where you need God's forgiveness and renewal?",
+                    gratitudeSuggestion: "Give thanks for God's endless mercy and grace in your life.",
+                    actionStepSuggestion: "Take a step towards reconciliation or seek forgiveness where needed today."
+                },
+                "Friday": {
+                    scripture: {
+                        text: "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.",
+                        reference: "Ephesians 4:32"
+                    },
+                    prayerSuggestion: "Loving God, as the week draws to a close, fill my heart with Your love and compassion. Help me to be kind and understanding towards others, extending forgiveness as You have so freely given it to me. May my actions reflect Your boundless love. Amen.",
+                    reminder: "Let go. Breathe. Rest. God is still working while you sleep.",
+                    spiritualChallengeTheme: "LOVE & COMPASSION",
+                    spiritualChallengePrompt: "How can you show intentional kindness or compassion to someone today?",
+                    gratitudeSuggestion: "Think of someone who has shown you great kindness or compassion.",
+                    actionStepSuggestion: "Perform a small act of kindness for someone without expecting anything in return."
+                },
+                "Saturday": {
+                    scripture: {
+                        text: "Come to me, all you who are weary and burdened, and I will give you rest.",
+                        reference: "Matthew 11:28"
+                    },
+                    prayerSuggestion: "Resting Father, on this Saturday, I lay my weariness and burdens before You. I come seeking the rest only You can provide. Help me to surrender my worries and trust in Your unfailing care. Refresh my soul and spirit. Amen.",
+                    reminder: "Celebration is a sacred rhythm. Let joy flow freely today.",
+                    spiritualChallengeTheme: "REST & SURRENDER",
+                    spiritualChallengePrompt: "What burden can you intentionally surrender to God today to find rest?",
+                    gratitudeSuggestion: "List the ways God has provided rest and relief in your life.",
+                    actionStepSuggestion: "Dedicate time today to true rest, whether it's physical, mental, or spiritual."
+                },
+                "Sunday": {
+                    scripture: {
+                        text: "This is the day that the Lord has made; let us rejoice and be glad in it.",
+                        reference: "Psalm 118:24"
+                    },
+                    prayerSuggestion: "Joyful Lord, on this blessed Sunday, I rejoice in the day You have made. Fill my heart with gladness and my spirit with worship. Help me to celebrate Your goodness and to share Your joy with those around me. Amen.",
+                    reminder: "Peace isn’t the absence of fear—it’s the presence of God.", // Reusing Monday's reminder for Sunday as no specific one was given.
+                    spiritualChallengeTheme: "JOY & WORSHIP",
+                    spiritualChallengePrompt: "How can you intentionally cultivate joy and express worship today?",
+                    gratitudeSuggestion: "Reflect on all the blessings from the past week and give thanks.",
+                    actionStepSuggestion: "Engage in an act of worship or celebration that brings you joy today."
+                }
+            };
+
+            // Get the content for the current day, default to Monday if dayName is not found
+            const currentDayData = dailyContent[dayName] || dailyContent["Monday"];
+
+            // Update Reminder
+            document.getElementById('daily-reminder').textContent = currentDayData.reminder;
+
+            // Update Scripture
+            document.getElementById('scripture-text').textContent = currentDayData.scripture.text;
+            document.getElementById('scripture-reference').textContent = currentDayData.scripture.reference;
+
+            // Update Prayer Suggestion
+            document.getElementById('prayer-textarea').placeholder = currentDayData.prayerSuggestion;
+
+            // Update Spiritual Challenge
+            document.getElementById('challenge-theme').textContent = currentDayData.spiritualChallengeTheme;
+            document.getElementById('challenge-prompt').textContent = currentDayData.spiritualChallengePrompt;
+            document.getElementById('spiritual-challenge-textarea').placeholder = currentDayData.spiritualChallengePrompt;
+
+            // Update Gratitude Prompt
+            document.getElementById('gratitude-textarea').placeholder = currentDayData.gratitudeSuggestion;
+
+            // Update Action Step
+            document.getElementById('action-step-textarea').placeholder = currentDayData.actionStepSuggestion;
+        });
+    </script>
 </body>
 </html>

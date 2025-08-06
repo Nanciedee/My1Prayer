@@ -135,7 +135,7 @@
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-gradient-to-br from-blue-100 to-purple-100 p-8 rounded-lg shadow-xl max-w-2xl w-full space-y-6 border border-gray-200">
+    <div class="bg-gradient-to-br from-blue-100 to-purple-100 p-8 rounded-lg shadow-xl max-w-2xl w-full space-y-6 border border-gray-200" id="main-content">
         <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-6" id="main-title">🌅 Morning Reflection</h1>
 
         <!-- Language Toggle Buttons -->
@@ -148,6 +148,16 @@
         <div class="text-center mb-4">
             <p class="text-2xl md:text-3xl reminder-text" id="daily-reminder">You are not walking alone. God is lighting the path, even when it curves.</p>
         </div>
+
+        <!-- Date Navigation and Save Button -->
+        <div class="flex items-center justify-between bg-gray-100 p-2 rounded-md shadow-sm border border-gray-200">
+            <button id="prev-day-btn" class="px-2 py-0.5 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition duration-200 font-semibold text-sm">&lt; Prev Day</button>
+            <span id="current-date-display" class="font-bold text-base text-gray-700"></span>
+            <button id="next-day-btn" class="px-2 py-0.5 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition duration-200 font-semibold text-sm">Next Day &gt;</button>
+            <button id="save-entry-btn" class="ml-3 px-3 py-1.5 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200 font-semibold text-sm">Save Entry</button>
+        </div>
+        <div id="save-status-message" class="text-center text-sm mt-2 text-gray-600"></div>
+
 
         <!-- Scripture of the Day Section -->
         <div class="space-y-2">
@@ -228,7 +238,7 @@
             </h2>
             <p class="text-gray-600 text-sm" id="action-step-subtitle">One way I will live out today’s verse is...</p>
 
-            <p class="text-gray-600 text-sm mb-2" id="action-instructions">Choose up to 2 action steps to focus on today:</p>
+            <p class="text-gray-600 text-sm mb-2" id="action-instructions">Choose up to 4 action steps to focus on today:</p>
             <div id="action-step-picker-container" class="flex flex-wrap gap-2 justify-center p-2 bg-gray-50 rounded-md border border-gray-200">
                 <!-- Action steps will be dynamically inserted here by JavaScript -->
             </div>
@@ -283,10 +293,22 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // No Firebase imports needed for local storage
+
         let currentLanguage = 'en'; // Default language
         let selectedEmojis = []; // Stores the actual emoji characters
         let selectedActionSteps = []; // Stores the actual action step phrases
+        let currentDate = new Date(); // Tracks the currently displayed date
+
+        // --- Canvas Drawing Variables ---
+        let canvas, ctx;
+        let isDrawing = false;
+        let drawingActions = []; // Stores drawing commands for saving/loading
+        let penColor = '#000000';
+        let penSize = 2;
+        let activePresetIcon = null; // Stores the SVG string for the currently selected preset icon
+
 
         // Define a palette of colors for selected action steps
         const actionStepColorClasses = [
@@ -313,7 +335,7 @@
             "🙏": { en: "prayer", fr: "prière" },
             "💡": { en: "idea", fr: "idée" },
             "💧": { en: "refreshment", fr: "rafraîchissement" },
-            "📚": { en: "learning", fr: "apprentissage" },
+            "�": { en: "learning", fr: "apprentissage" },
             "🎶": { en: "music", fr: "musique" },
             "🎨": { en: "creativity", fr: "créativité" },
             "🌟": { en: "blessing", fr: "bénédiction" },
@@ -380,7 +402,7 @@
                 gratitudePlaceholder: "Write your list here",
                 actionStepTitle: "Action Step",
                 actionStepSubtitle: "One way I will live out today’s verse is...",
-                actionInstructions: "Choose up to 2 action steps to focus on today:",
+                actionInstructions: "Choose up to 4 action steps to focus on today:",
                 actionStepPlaceholder: "Elaborate on your chosen action steps or write your own here.",
                 visualSpaceTitle: "Visual Space",
                 visualSpaceSubtitle: "Sketch, doodle, or paste an image that reflects your morning inspiration.",
@@ -478,7 +500,7 @@
                 gratitudePlaceholder: "Écrivez votre liste ici",
                 actionStepTitle: "Étape d'Action",
                 actionStepSubtitle: "Une façon de vivre le verset d'aujourd'hui est...",
-                actionInstructions: "Choisissez jusqu'à 2 étapes d'action sur lesquelles vous concentrer aujourd'hui :",
+                actionInstructions: "Choisissez jusqu'à 4 étapes d'action sur lesquelles vous concentrer aujourd'hui :",
                 actionStepPlaceholder: "Élaborez sur vos étapes d'action choisies ou écrivez les vôtres ici.",
                 visualSpaceTitle: "Espace Visuel",
                 visualSpaceSubtitle: "Dessinez, gribouillez ou collez une image qui reflète votre inspiration matinale.",
@@ -534,43 +556,34 @@
                             text: "Soyez bons les uns envers les autres, compatissants, vous pardonnant réciproquement, comme Dieu vous a pardonné en Christ.",
                             reference: "Éphésiens 4:32"
                         },
-                        prayerSuggestion: "Dieu aimant, alors que la semaine touche à sa fin, remplis mon cœur de Ton amour et de Ta compassion. Aide-moi à être bon et compréhensif envers les autres, en accordant le pardon comme Tu me l'as si librement donné. Que mes actions reflètent Ton amour illimité. Amen.",
-                        reminder: "Lâchez prise. Respirez. Reposez-vous. Dieu travaille toujours pendant que vous dormez.",
-                        spiritualChallengeTheme: "Amour et Compassion",
-                        spiritualChallengePrompt: "Comment pouvez-vous faire preuve de gentillesse ou de compassion intentionnelle envers quelqu'un aujourd'hui ?"
+                        prayerSuggestion: "Loving God, as the week draws to a close, fill my heart with Your love and compassion. Help me to be kind and understanding towards others, extending forgiveness as You have so freely given it to me. May my actions reflect Your boundless love. Amen.",
+                        reminder: "Every act of compassion is a reflection of God’s love.",
+                        spiritualChallengeTheme: "Love & Compassion",
+                        spiritualChallengePrompt: "How can you show intentional kindness or compassion to someone today?"
                     },
                     "Saturday": {
                         scripture: {
-                            text: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.",
-                            reference: "Matthieu 11:28"
+                            text: "Come to me, all you who are weary and burdened, and I will give you rest.",
+                            reference: "Matthew 11:28"
                         },
-                        prayerSuggestion: "Père reposant, en ce samedi, je dépose ma fatigue et mes fardeaux devant Toi. Je viens chercher le repos que Toi seul peux offrir. Aide-moi à abandonner mes soucis et à me confier à Tes soins infaillibles. Rafraîchis mon âme et mon esprit. Amen.",
-                        reminder: "La célébration est un rythme sacré. Laissez la joie couler librement aujourd'hui.",
-                        spiritualChallengeTheme: "Repos et Abandon",
-                        spiritualChallengePrompt: "Quel fardeau pouvez-vous intentionnellement abandonner à Dieu aujourd'hui pour trouver le repos ?"
+                        prayerSuggestion: "Resting Father, on this Saturday, I lay my weariness and burdens before You. I come seeking the rest only You can provide. Help me to surrender my worries and trust in Your unfailing care. Refresh my soul and spirit. Amen.",
+                        reminder: "Let go. Breathe. Rest. God is still working while you sleep.",
+                        spiritualChallengeTheme: "Rest & Surrender",
+                        spiritualChallengePrompt: "What burden can you intentionally surrender to God today to find rest?"
                     },
                     "Sunday": {
                         scripture: {
-                            text: "C'est ici la journée que l'Éternel a faite : Qu'elle soit pour nous un sujet d'allégresse et de joie !",
-                            reference: "Psaume 118:24"
+                            text: "This is the day that the Lord has made; let us rejoice and be glad in it.",
+                            reference: "Psalm 118:24"
                         },
-                        prayerSuggestion: "Seigneur joyeux, en ce dimanche béni, je me réjouis du jour que Tu as fait. Remplis mon cœur de joie et mon esprit d'adoration. Aide-moi à célébrer Ta bonté et à partager Ta joie avec ceux qui m'entourent. Amen.",
+                        prayerSuggestion: "Joyful Lord, on this blessed Sunday, I rejoice in the day You have made. Fill my heart with gladness and my spirit with worship. Help me to celebrate Your goodness and to share Your joy with those around me. Amen.",
                         reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
                         spiritualChallengeTheme: "Joie et Adoration",
-                        spiritualChallengePrompt: "Comment pouvez-vous intentionnellement cultiver la joie et exprimer l'adoration aujourd'hui ?"
+                        spiritualChallengePrompt: "How can you intentionally cultivate joy and express worship today?"
                     }
                 }
             }
         };
-
-        // --- Canvas Drawing Variables ---
-        let canvas, ctx;
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        let penColor = '#000000';
-        let penSize = 2;
-        let activePresetIcon = null; // Stores the SVG string for the currently selected preset icon
 
         /**
          * Initializes the canvas for drawing.
@@ -583,10 +596,8 @@
             const setCanvasDimensions = () => {
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
-                // Redraw content if any, after resize (for persistent drawings, would need to save state)
-                // For this basic version, resizing clears the canvas.
-                ctx.fillStyle = '#ffffff'; // Set background to white
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Clear and redraw when resized to maintain aspect ratio and prevent stretching
+                redrawCanvas();
             };
 
             setCanvasDimensions(); // Set initial dimensions
@@ -595,7 +606,11 @@
             // Drawing event listeners for mouse
             canvas.addEventListener('mousedown', (e) => {
                 if (activePresetIcon) {
-                    drawPresetIconOnCanvas(e.offsetX, e.offsetY, activePresetIcon);
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    drawingActions.push({ type: 'icon', x, y, svg: activePresetIcon });
+                    redrawCanvas();
                     activePresetIcon = null; // Deselect icon after drawing
                     generatePresetIconButtons(); // Re-render buttons to show deselection
                     canvas.style.cursor = 'crosshair'; // Reset cursor
@@ -603,18 +618,20 @@
                 }
                 isDrawing = true;
                 [lastX, lastY] = [e.offsetX, e.offsetY];
+                drawingActions.push({ type: 'path', segments: [], color: penColor, size: penSize });
             });
 
             canvas.addEventListener('mousemove', (e) => {
                 if (!isDrawing) return;
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(e.offsetX, e.offsetY);
-                ctx.strokeStyle = penColor;
-                ctx.lineWidth = penSize;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-                [lastX, lastY] = [e.offsetX, e.offsetY];
+                const currentX = e.offsetX;
+                const currentY = e.offsetY;
+                const lastPath = drawingActions[drawingActions.length - 1];
+                if (lastPath && lastPath.type === 'path') {
+                    lastPath.segments.push({ x1: lastX, y1: lastY, x2: currentX, y2: currentY });
+                }
+                lastX = currentX;
+                lastY = currentY;
+                redrawCanvas(); // Redraw entire canvas for smooth drawing
             });
 
             canvas.addEventListener('mouseup', () => isDrawing = false);
@@ -629,7 +646,8 @@
                 const y = touch.clientY - rect.top;
 
                 if (activePresetIcon) {
-                    drawPresetIconOnCanvas(x, y, activePresetIcon);
+                    drawingActions.push({ type: 'icon', x, y, svg: activePresetIcon });
+                    redrawCanvas();
                     activePresetIcon = null; // Deselect icon after drawing
                     generatePresetIconButtons(); // Re-render buttons to show deselection
                     canvas.style.cursor = 'crosshair'; // Reset cursor
@@ -637,6 +655,7 @@
                 }
                 isDrawing = true;
                 [lastX, lastY] = [x, y];
+                drawingActions.push({ type: 'path', segments: [], color: penColor, size: penSize });
             }, { passive: false });
 
             canvas.addEventListener('touchmove', (e) => {
@@ -644,17 +663,16 @@
                 if (!isDrawing) return;
                 const touch = e.touches[0];
                 const rect = canvas.getBoundingClientRect();
-                const x = touch.clientX - rect.left;
-                const y = touch.clientY - rect.top;
+                const currentX = touch.clientX - rect.left;
+                const currentY = touch.clientY - rect.top;
 
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(x, y);
-                ctx.strokeStyle = penColor;
-                ctx.lineWidth = penSize;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-                [lastX, lastY] = [x, y];
+                const lastPath = drawingActions[drawingActions.length - 1];
+                if (lastPath && lastPath.type === 'path') {
+                    lastPath.segments.push({ x1: lastX, y1: lastY, x2: currentX, y2: currentY });
+                }
+                lastX = currentX;
+                lastY = currentY;
+                redrawCanvas(); // Redraw entire canvas for smooth drawing
             }, { passive: false });
 
             canvas.addEventListener('touchend', () => isDrawing = false);
@@ -669,14 +687,39 @@
                 document.getElementById('penSizeValue').textContent = penSize;
             });
             document.getElementById('clearCanvas').addEventListener('click', () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#ffffff'; // Reset background to white after clearing
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                drawingActions = []; // Clear all stored drawing actions
+                redrawCanvas(); // Clear the visual canvas
+            });
+        };
+
+        /**
+         * Redraws the entire canvas based on the stored drawingActions array.
+         */
+        const redrawCanvas = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffffff'; // Set background to white
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawingActions.forEach(action => {
+                if (action.type === 'path') {
+                    ctx.strokeStyle = action.color;
+                    ctx.lineWidth = action.size;
+                    ctx.lineCap = 'round';
+                    action.segments.forEach(segment => {
+                        ctx.beginPath();
+                        ctx.moveTo(segment.x1, segment.y1);
+                        ctx.lineTo(segment.x2, segment.y2);
+                        ctx.stroke();
+                    });
+                } else if (action.type === 'icon') {
+                    drawPresetIconOnCanvas(action.x, action.y, action.svg);
+                }
             });
         };
 
         /**
          * Draws a selected preset SVG icon onto the canvas at specified coordinates.
+         * This is called by redrawCanvas, so it doesn't add to drawingActions.
          * @param {number} x - X coordinate on canvas.
          * @param {number} y - Y coordinate on canvas.
          * @param {string} svgString - The SVG string to draw.
@@ -684,9 +727,9 @@
         const drawPresetIconOnCanvas = (x, y, svgString) => {
             const img = new Image();
             const svgDataUrl = 'data:image/svg+xml;base64,' + btoa(svgString);
+            const iconSize = 50; // pixels
 
             img.onload = () => {
-                const iconSize = 50; // pixels
                 ctx.drawImage(img, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
             };
             img.src = svgDataUrl;
@@ -833,7 +876,7 @@
                 button.classList.remove('selected'); // Remove the generic 'selected' class
             } else {
                 // Action step is not selected, try to select it
-                if (selectedActionSteps.length < 2) { // Limit to 2 action steps
+                if (selectedActionSteps.length < 4) { // Changed limit from 2 to 4 action steps
                     selectedActionSteps.push(actionStep);
                     button.classList.add('selected'); // Add generic 'selected' class
 
@@ -883,13 +926,125 @@
         };
 
         /**
-         * Updates all dynamic content on the page based on the selected language.
+         * Formats a Date object into a "YYYY-MM-DD" string.
+         * @param {Date} date - The date object.
+         * @returns {string} Formatted date string.
+         */
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        /**
+         * Clears all input fields and canvas.
+         */
+        const clearEntryFields = () => {
+            document.getElementById('verse-reflection-textarea').value = '';
+            document.getElementById('prayer-textarea').value = '';
+            document.getElementById('spiritual-challenge-textarea').value = '';
+            document.getElementById('gratitude-textarea').value = '';
+            selectedEmojis = [];
+            selectedActionSteps = [];
+            drawingActions = []; // Clear drawing actions
+            updateSelectedEmojisDisplay();
+            generateActionStepButtons(); // Re-render action buttons to clear selections
+            redrawCanvas(); // Clear the visual canvas
+        };
+
+        /**
+         * Displays a status message to the user.
+         * @param {string} message - The message to display.
+         * @param {string} type - 'success', 'error', or 'info'.
+         */
+        const showStatusMessage = (message, type) => {
+            const statusDiv = document.getElementById('save-status-message');
+            statusDiv.textContent = message;
+            statusDiv.className = 'text-center text-sm mt-2'; // Reset classes
+            if (type === 'success') {
+                statusDiv.classList.add('text-green-600');
+            } else if (type === 'error') {
+                statusDiv.classList.add('text-red-600');
+            } else {
+                statusDiv.classList.add('text-gray-600');
+            }
+            setTimeout(() => statusDiv.textContent = '', 3000); // Clear after 3 seconds
+        };
+
+        /**
+         * Saves the current day's entry to Local Storage.
+         */
+        const saveEntry = () => {
+            showStatusMessage("Saving entry to local storage...", 'info');
+            const dateString = formatDate(currentDate);
+
+            const entryData = {
+                date: dateString,
+                verseReflection: document.getElementById('verse-reflection-textarea').value,
+                personalPrayer: document.getElementById('prayer-textarea').value,
+                spiritualChallenge: document.getElementById('spiritual-challenge-textarea').value,
+                gratitudeText: document.getElementById('gratitude-textarea').value,
+                selectedEmojis: selectedEmojis,
+                selectedActionSteps: selectedActionSteps,
+                drawingActions: drawingActions // Store the array of drawing commands
+            };
+
+            try {
+                localStorage.setItem(`journal_entry_${dateString}`, JSON.stringify(entryData));
+                showStatusMessage("Entry saved successfully to local storage!", 'success');
+            } catch (e) {
+                console.error("Error saving to local storage: ", e);
+                showStatusMessage("Error saving entry to local storage.", 'error');
+            }
+        };
+
+        /**
+         * Loads an entry for a specific date from Local Storage.
+         * @param {Date} dateToLoad - The Date object for the entry to load.
+         */
+        const loadEntry = (dateToLoad) => {
+            showStatusMessage("Loading entry from local storage...", 'info');
+            const dateString = formatDate(dateToLoad);
+
+            try {
+                const storedData = localStorage.getItem(`journal_entry_${dateString}`);
+
+                clearEntryFields(); // Clear current fields before loading new data
+
+                if (storedData) {
+                    const data = JSON.parse(storedData);
+                    document.getElementById('verse-reflection-textarea').value = data.verseReflection || '';
+                    document.getElementById('prayer-textarea').value = data.personalPrayer || '';
+                    document.getElementById('spiritual-challenge-textarea').value = data.spiritualChallenge || '';
+                    document.getElementById('gratitude-textarea').value = data.gratitudeText || '';
+                    selectedEmojis = data.selectedEmojis || [];
+                    selectedActionSteps = data.selectedActionSteps || [];
+                    drawingActions = data.drawingActions || []; // Load drawing actions
+                    
+                    updateSelectedEmojisDisplay();
+                    generateActionStepButtons(); // Re-render to show loaded selections
+                    redrawCanvas(); // Redraw canvas with loaded actions
+
+                    showStatusMessage("Entry loaded from local storage.", 'success');
+                } else {
+                    showStatusMessage("No entry found for this date. Starting a new one.", 'info');
+                }
+                currentDate = dateToLoad; // Update current date after successful load attempt
+                updateContent(currentLanguage); // Update daily content for the new date
+            } catch (e) {
+                console.error("Error loading from local storage: ", e);
+                showStatusMessage("Error loading entry from local storage.", 'error');
+            }
+        };
+
+        /**
+         * Updates all dynamic content on the page based on the selected language and current date.
          * @param {string} lang - The language code ('en' or 'fr').
          */
         const updateContent = (lang) => {
             const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const today = new Date();
-            const dayName = days[today.getDay()];
+            const dayName = days[currentDate.getDay()];
             // Get daily content for the current day, defaulting to Monday if not found
             const dailyData = content[lang].daily[dayName] || content[lang].daily["Monday"];
 
@@ -923,13 +1078,11 @@
 
 
             // Update dynamic daily content
-            // Removed the reminderPrefix from the display text
             document.getElementById('daily-reminder').textContent = dailyData.reminder;
             document.getElementById('scripture-text').textContent = dailyData.scripture.text;
             document.getElementById('scripture-reference').textContent = dailyData.scripture.reference;
             document.getElementById('prayer-textarea').placeholder = dailyData.prayerSuggestion;
 
-            // Get the element for the spiritual challenge title and check if it exists
             const spiritualChallengeFullTitleElement = document.getElementById('spiritual-challenge-full-title');
             if (spiritualChallengeFullTitleElement) {
                 spiritualChallengeFullTitleElement.textContent = content[lang].spiritualChallengeTitle + " " + dailyData.spiritualChallengeTheme;
@@ -939,6 +1092,11 @@
 
             document.getElementById('challenge-prompt').textContent = dailyData.spiritualChallengePrompt;
             document.getElementById('spiritual-challenge-textarea').placeholder = dailyData.spiritualChallengePrompt;
+
+            // Update current date display
+            document.getElementById('current-date-display').textContent = currentDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'fr-FR', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
 
             // Re-generate emoji buttons to ensure correct styling for selected/unselected states and update names
             generateEmojiButtons();
@@ -967,22 +1125,24 @@
         };
 
         // Event listener for when the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize Canvas and its drawing functionality
+            initializeCanvas();
+
             // Detect browser language preference for initial load
             const browserLang = navigator.language.split('-')[0];
             if (browserLang === 'fr') {
                 currentLanguage = 'fr';
             }
 
-            // Initialize Canvas and its drawing functionality
-            initializeCanvas();
-
             // Generate buttons and update all content based on the initial language
             generateEmojiButtons();
             generateActionStepButtons(); // Generate action step buttons on load
             generatePresetIconButtons(); // Generate preset icon buttons on load
-            updateContent(currentLanguage); // Call updateContent after all elements are generated
             
+            // Load today's entry initially
+            loadEntry(currentDate);
+
             // Add event listeners for language toggle buttons
             document.getElementById('lang-en').addEventListener('click', () => {
                 currentLanguage = 'en';
@@ -993,7 +1153,23 @@
                 currentLanguage = 'fr';
                 updateContent('fr');
             });
+
+            // Add event listeners for journal navigation and save
+            document.getElementById('prev-day-btn').addEventListener('click', () => {
+                const newDate = new Date(currentDate);
+                newDate.setDate(newDate.getDate() - 1);
+                loadEntry(newDate);
+            });
+
+            document.getElementById('next-day-btn').addEventListener('click', () => {
+                const newDate = new Date(currentDate);
+                newDate.setDate(newDate.getDate() + 1);
+                loadEntry(newDate);
+            });
+
+            document.getElementById('save-entry-btn').addEventListener('click', saveEntry);
         });
     </script>
 </body>
 </html>
+�

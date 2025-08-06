@@ -7,20 +7,25 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Delius&display=swap" rel="stylesheet">
+    <!-- New font for the reminder text -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Light gray background */
+            background-color: #4169E1; /* Royal Blue */
         }
         textarea {
             resize: vertical; /* Allow vertical resizing */
             min-height: 80px; /* Minimum height for text areas */
+            background-color: #FFFACD; /* Pale Yellow background for text areas */
         }
         /* Style for the scripture text to give it a distinct look */
         .scripture-text {
-            font-family: 'Georgia', serif; /* A classic, elegant font */
+            font-family: 'Delius', serif; /* A classic, elegant font */
             font-size: 1.25rem; /* Larger text */
             font-weight: 600; /* Semi-bold */
+            font-style: italic;
             color: #3b5d46; /* A deep green for a natural feel */
             line-height: 1.6;
             text-align: center;
@@ -32,21 +37,122 @@
             text-align: center;
             font-style: italic;
         }
+        /* Custom styling for emoji buttons */
+        .emoji-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px; /* Fixed width for consistent grid */
+            height: 48px; /* Fixed height for consistent grid */
+        }
+        /* Custom styling for action step buttons */
+        .action-step-button {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px; /* Pill shape */
+            border: 2px solid;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            white-space: nowrap; /* Prevent text from wrapping inside button */
+        }
+        /* Default unselected state */
+        .action-step-button:not(.selected) {
+            background-color: #e5e7eb; /* Light gray for unselected */
+            border-color: #d1d5db; /* Gray border */
+            color: #4b5563; /* Dark gray text */
+        }
+        .action-step-button:hover:not(.selected) {
+            background-color: #d1d5db;
+        }
+
+        /* Specific colors for selected states */
+        .action-step-button.color-scheme-0 {
+            background-color: #a7f3d0; /* Light Green */
+            border-color: #10b981; /* Green-600 */
+            color: #065f46; /* Green-800 */
+        }
+        .action-step-button.color-scheme-1 {
+            background-color: #bfdbfe; /* Light Blue */
+            border-color: #3b82f6; /* Blue-600 */
+            color: #1e40af; /* Blue-800 */
+        }
+        .action-step-button.color-scheme-2 {
+            background-color: #fecaca; /* Light Red */
+            border-color: #ef4444; /* Red-600 */
+            color: #991b1b; /* Red-800 */
+        }
+        .action-step-button.color-scheme-3 {
+            background-color: #fde68a; /* Light Yellow */
+            border-color: #f59e0b; /* Yellow-600 */
+            color: #92400e; /* Yellow-800 */
+        }
+        .action-step-button.color-scheme-4 {
+            background-color: #e9d5ff; /* Light Purple */
+            border-color: #a855f7; /* Purple-600 */
+            color: #6b21a8; /* Purple-800 */
+        }
+
+        /* Canvas styling */
+        #drawingCanvas {
+            border: 1px solid #d1d5db;
+            background-color: #ffffff;
+            cursor: crosshair;
+            touch-action: none; /* Prevent browser default touch actions */
+        }
+        /* Styling for SVG icons within buttons */
+        .preset-icon-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px; /* Fixed size for consistency */
+            height: 48px;
+            border-radius: 0.375rem; /* rounded-md */
+            border: 2px solid #d1d5db; /* border-gray-300 */
+            background-color: #f9fafb; /* bg-gray-50 */
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        .preset-icon-button:hover {
+            background-color: #e5e7eb; /* hover:bg-gray-200 */
+        }
+        .preset-icon-button.selected {
+            background-color: #bfdbfe; /* Light blue background for selected button */
+            border-color: #3b82f6; /* Blue border for selected button */
+        }
+        .preset-icon-button svg {
+            width: 80%; /* Make SVG fill the button, slightly smaller */
+            height: 80%;
+            /* SVG fill colors are now defined directly within the SVG paths */
+        }
+
+        /* New style for the reminder text */
+        .reminder-text {
+            font-family: 'Playfair Display', serif; /* Elegant font */
+            font-weight: 700; /* Bold */
+            font-style: italic; /* Italic for refinement */
+            color: #4b5563; /* Dark gray for visibility against pale yellow box */
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-8 rounded-lg shadow-xl max-w-2xl w-full space-y-6 border border-gray-200">
-        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-6">🌅 Morning Reflection</h1>
+    <div class="bg-gradient-to-br from-blue-100 to-purple-100 p-8 rounded-lg shadow-xl max-w-2xl w-full space-y-6 border border-gray-200">
+        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-6" id="main-title">🌅 Morning Reflection</h1>
+
+        <!-- Language Toggle Buttons -->
+        <div class="flex justify-end space-x-2 mb-4">
+            <button id="lang-en" class="px-4 py-2 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition duration-200">English</button>
+            <button id="lang-fr" class="px-4 py-2 rounded-md bg-gray-300 text-gray-800 font-semibold hover:bg-gray-400 transition duration-200">Français</button>
+        </div>
 
         <!-- Reminder Section - Content will be updated by JavaScript -->
-        <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-800 p-4 rounded-md shadow-sm">
-            <p class="font-semibold" id="daily-reminder">Reminder: You are not walking alone. God is lighting the path, even when it curves.</p>
+        <div class="text-center mb-4">
+            <p class="text-2xl md:text-3xl reminder-text" id="daily-reminder">You are not walking alone. God is lighting the path, even when it curves.</p>
         </div>
 
         <!-- Scripture of the Day Section -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-yellow-500 mr-2">📖</span> Scripture of the Day
+                <span class="text-yellow-500 mr-2">📖</span> <span id="scripture-title">Scripture of the Day</span>
             </h2>
             <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
                 <p class="scripture-text" id="scripture-text"></p>
@@ -57,10 +163,11 @@
         <!-- Verse Reflection Section -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-yellow-500 mr-2">✨</span> What does this verse mean to me today?
+                <span class="text-yellow-500 mr-2">✨</span> <span id="verse-reflection-title">What does this verse mean to me today?</span>
             </h2>
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
+                id="verse-reflection-textarea"
                 placeholder="Write your thoughts here"
             ></textarea>
         </div>
@@ -68,9 +175,9 @@
         <!-- Personal Prayer Section -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-purple-500 mr-2">🙏</span> Personal Prayer
+                <span class="text-purple-500 mr-2">🙏</span> <span id="personal-prayer-title">Personal Prayer</span>
             </h2>
-            <p class="text-gray-600 text-sm">Talk to God about your hopes and needs today. Here's a suggestion to inspire you:</p>
+            <p class="text-gray-600 text-sm" id="personal-prayer-subtitle">Talk to God about your hopes and needs today. Here's a suggestion to inspire you:</p>
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
                 id="prayer-textarea"
@@ -81,7 +188,7 @@
         <!-- Spiritual Challenge Section - Placeholder will be updated by JavaScript -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-green-500 mr-2">🌱</span> Spiritual Challenge of the Day: <span id="challenge-theme" class="ml-1">TRUST</span>
+                <span class="text-green-500 mr-2">🌱</span> <span id="spiritual-challenge-full-title">Spiritual Challenge of the Day: Trust</span>
             </h2>
             <p class="text-gray-600 text-sm" id="challenge-prompt">Where am I being called to trust God more fully today?</p>
             <textarea
@@ -94,9 +201,19 @@
         <!-- Gratitude Prompt Section - Placeholder will be updated by JavaScript -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-pink-500 mr-2">💛</span> Gratitude Prompt
+                <span class="text-pink-500 mr-2">💛</span> <span id="gratitude-title">Gratitude Prompt</span>
             </h2>
-            <p class="text-gray-600 text-sm">Today, I am thankful for...</p>
+            <p class="text-gray-600 text-sm" id="gratitude-subtitle">Today, I am thankful for...</p>
+
+            <!-- Emoji Picker for Gratitude -->
+            <p class="text-gray-600 text-sm mb-2" id="emoji-instructions">Choose up to 4 emojis that represent your gratitude today:</p>
+            <div id="emoji-picker-container" class="grid grid-cols-5 gap-2 justify-items-center p-2 bg-gray-50 rounded-md border border-gray-200">
+                <!-- Emojis will be dynamically inserted here by JavaScript -->
+            </div>
+            <div id="selected-emojis-display" class="mt-2 text-3xl text-center">
+                <!-- Selected emojis will appear here -->
+            </div>
+
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
                 id="gratitude-textarea"
@@ -104,147 +221,778 @@
             ></textarea>
         </div>
 
-        <!-- Action Step Section - Placeholder will be updated by JavaScript -->
+        <!-- Action Step Section - New interactive picker -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-red-500 mr-2">📌</span> Action Step
+                <span class="text-red-500 mr-2">📌</span> <span id="action-step-title">Action Step</span>
             </h2>
-            <p class="text-gray-600 text-sm">One way I will live out today’s verse is...</p>
+            <p class="text-gray-600 text-sm" id="action-step-subtitle">One way I will live out today’s verse is...</p>
+
+            <p class="text-gray-600 text-sm mb-2" id="action-instructions">Choose up to 2 action steps to focus on today:</p>
+            <div id="action-step-picker-container" class="flex flex-wrap gap-2 justify-center p-2 bg-gray-50 rounded-md border border-gray-200">
+                <!-- Action steps will be dynamically inserted here by JavaScript -->
+            </div>
+            <div id="selected-action-steps-display" class="mt-2 text-base text-center font-medium text-gray-700">
+                <!-- Selected action steps will appear here -->
+            </div>
+
             <textarea
                 class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200 ease-in-out shadow-sm"
                 id="action-step-textarea"
-                placeholder="Write your action here"
+                placeholder="Elaborate on your chosen action steps or write your own here."
             ></textarea>
         </div>
 
         <!-- Visual Space Section -->
         <div class="space-y-2">
             <h2 class="text-2xl font-semibold text-gray-700 flex items-center">
-                <span class="text-blue-500 mr-2">🖼</span> Visual Space
+                <span class="text-blue-500 mr-2">🖼</span> <span id="visual-space-title">Visual Space</span>
             </h2>
-            <p class="text-gray-600 text-sm">Sketch, doodle, or paste an image that reflects your morning inspiration.</p>
-            <div class="w-full h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center text-gray-500 text-center p-4">
-                [Blank space for drawing or attaching something]
+            <p class="text-gray-600 text-sm" id="visual-space-subtitle">Sketch, doodle, or paste an image that reflects your morning inspiration.</p>
+
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Drawing Controls -->
+                <div class="flex flex-col p-3 bg-gray-50 rounded-md border border-gray-200 flex-grow">
+                    <p class="text-gray-600 text-sm mb-2" id="drawing-tools-title">Drawing Tools:</p>
+                    <div class="flex items-center space-x-2 mb-2">
+                        <input type="color" id="penColor" value="#000000" class="w-8 h-8 rounded-md border border-gray-300 cursor-pointer">
+                        <label for="penColor" class="text-sm text-gray-700" id="pen-color-label">Pen Color</label>
+                    </div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <input type="range" id="penSize" min="1" max="10" value="2" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <span class="text-sm text-gray-700" id="pen-size-label">Size: <span id="penSizeValue">2</span>px</span>
+                    </div>
+                    <button id="clearCanvas" class="px-4 py-2 bg-red-500 text-white rounded-md font-semibold hover:bg-red-600 transition duration-200">
+                        <span id="clear-canvas-button-text">Clear Canvas</span>
+                    </button>
+                </div>
+
+                <!-- Preset Icons -->
+                <div class="flex flex-col p-3 bg-gray-50 rounded-md border border-gray-200 flex-grow">
+                    <p class="text-gray-600 text-sm mb-2" id="preset-icons-title">Preset Icons:</p>
+                    <div id="preset-icon-container" class="grid grid-cols-4 gap-2 justify-items-center">
+                        <!-- Preset icons will be dynamically inserted here -->
+                    </div>
+                </div>
             </div>
+
+            <canvas id="drawingCanvas" class="w-full h-64 md:h-80 rounded-md shadow-sm"></canvas>
+            <p class="text-gray-600 text-sm mt-2 text-center" id="paste-image-info">
+                (Note: Pasting images directly from clipboard is not supported in this simple version. Please use drawing tools and preset icons.)
+            </p>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const today = new Date();
-            const dayName = days[today.getDay()]; // Get current day name
+        let currentLanguage = 'en'; // Default language
+        let selectedEmojis = []; // Stores the actual emoji characters
+        let selectedActionSteps = []; // Stores the actual action step phrases
 
-            const dailyContent = {
-                "Monday": {
-                    scripture: {
-                        text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight.",
-                        reference: "Proverbs 3:5-6"
+        // Define a palette of colors for selected action steps
+        const actionStepColorClasses = [
+            'color-scheme-0', // Greenish
+            'color-scheme-1', // Blueish
+            'color-scheme-2', // Reddish
+            'color-scheme-3', // Yellowish
+            'color-scheme-4'  // Purplish
+        ];
+
+        const allEmojis = [
+            "😊", "💖", "☀️", "🌳", "🏡", "🫂", "🙏", "💡", "💧", "📚",
+            "🎶", "🎨", "🌟", "💪", "🍎", "🕊️", "🎁", "✨", "🌈", "☕"
+        ];
+
+        // New object to store emoji names in both languages
+        const emojiNames = {
+            "😊": { en: "joy", fr: "joie" },
+            "💖": { en: "love", fr: "amour" },
+            "☀️": { en: "sun", fr: "soleil" },
+            "🌳": { en: "nature", fr: "nature" },
+            "🏡": { en: "home", fr: "maison" },
+            "🫂": { en: "community", fr: "communauté" },
+            "🙏": { en: "prayer", fr: "prière" },
+            "💡": { en: "idea", fr: "idée" },
+            "💧": { en: "refreshment", fr: "rafraîchissement" },
+            "📚": { en: "learning", fr: "apprentissage" },
+            "🎶": { en: "music", fr: "musique" },
+            "🎨": { en: "creativity", fr: "créativité" },
+            "🌟": { en: "blessing", fr: "bénédiction" },
+            "💪": { en: "strength", fr: "force" },
+            "🍎": { en: "health", fr: "santé" },
+            "🕊️": { en: "peace", fr: "paix" },
+            "🎁": { en: "gift", fr: "cadeau" },
+            "✨": { en: "sparkle", fr: "éclat" },
+            "🌈": { en: "hope", fr: "espoir" },
+            "☕": { en: "comfort", fr: "confort" }
+        };
+
+        const allActionSteps = [
+            { en: "Practice active listening", fr: "Pratiquer l'écoute active" },
+            { en: "Offer a genuine compliment", fr: "Faire un compliment sincère" },
+            { en: "Spend 15 mins in nature", fr: "Passer 15 min dans la nature" },
+            { en: "Write a thank-you note", fr: "Écrire une note de remerciement" },
+            { en: "Help someone without being asked", fr: "Aider quelqu'un sans qu'on le demande" },
+            { en: "Meditate for 5 minutes", fr: "Méditer 5 minutes" },
+            { en: "Read an inspiring passage", fr: "Lire un passage inspirant" },
+            { en: "Forgive a past grievance", fr: "Pardonner une vieille rancune" },
+            { en: "Connect with a loved one", fr: "Prendre contact avec un proche" },
+            { en: "Do a small act of service", fr: "Faire un petit acte de service" },
+            { en: "Learn something new", fr: "Apprendre quelque chose de nouveau" },
+            { en: "Express gratitude verbally", fr: "Exprimer sa gratitude verbalement" },
+            { en: "Take a mindful break", fr: "Faire une pause consciente" },
+            { en: "Let go of control", fr: "Lâcher prise sur le contrôle" },
+            { en: "Share a smile with a stranger", fr: "Partager un sourire avec un inconnu" }
+        ];
+
+        // Updated: Preset icons for Visual Space - now with intrinsic colors in SVGs
+        const presetIcons = [
+            // Weather Icons (similar to image_e570ba.png)
+            { name: { en: "Sunny", fr: "Ensoleillé" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FFA500"/></linearGradient></defs><circle cx="12" cy="12" r="6" fill="url(#sunGrad)"/><path d="M12 2v2m0 16v2m8-10h2M2 12h2m14.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 6.05l1.414-1.414M6.05 6.05L4.636 4.636" stroke="#FF8C00" stroke-width="1.5" stroke-linecap="round"/></svg>' },
+            { name: { en: "Partly Cloudy", fr: "Partiellement Nuageux" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="partlyCloudySunGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FFA500"/></linearGradient></defs><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-3.72 0-6.83 2.81-7.35 6.41C2.57 11.49 1 13.68 1 16c0 3.31 2.69 6 6 6h11c3.87 0 7-3.13 7-7 0-3.59-2.65-6.54-6.09-6.96z" fill="#D3D3D3"/><circle cx="17" cy="7" r="3" fill="url(#partlyCloudySunGrad)"/></svg>' },
+            { name: { en: "Cloudy", fr: "Nuageux" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-3.72 0-6.83 2.81-7.35 6.41C2.57 11.49 1 13.68 1 16c0 3.31 2.69 6 6 6h11c3.87 0 7-3.13 7-7 0-3.59-2.65-6.54-6.09-6.96z" fill="#D3D3D3"/></svg>' },
+            { name: { en: "Rainy", fr: "Pluvieux" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-3.72 0-6.83 2.81-7.35 6.41C2.57 11.49 1 13.68 1 16c0 3.31 2.69 6 6 6h11c3.87 0 7-3.13 7-7 0-3.59-2.65-6.54-6.09-6.96z" fill="#D3D3D3"/><path d="M12 18v3m-3-3v3m6-3v3" stroke="#4682B4" stroke-width="2" stroke-linecap="round"/></svg>' },
+            { name: { en: "Stormy", fr: "Orageux" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-3.72 0-6.83 2.81-7.35 6.41C2.57 11.49 1 13.68 1 16c0 3.31 2.69 6 6 6h11c3.87 0 7-3.13 7-7 0-3.59-2.65-6.54-6.09-6.96z" fill="#808080"/><path d="M15 14h-3l-2 5h2l-3 5h2l-2 5z" fill="#FFD700"/></svg>' },
+            { name: { en: "Snowy", fr: "Neigeux" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4c-3.72 0-6.83 2.81-7.35 6.41C2.57 11.49 1 13.68 1 16c0 3.31 2.69 6 6 6h11c3.87 0 7-3.13 7-7 0-3.59-2.65-6.54-6.09-6.96z" fill="#D3D3D3"/><path d="M12 18.5v1.5m-1.5-1.5l1.5 1.5m1.5-1.5l-1.5 1.5M8 18.5v1.5m-1.5-1.5l1.5 1.5m1.5-1.5l-1.5 1.5M16 18.5v1.5m-1.5-1.5l1.5 1.5m1.5-1.5l-1.5 1.5" stroke="#ADD8E6" stroke-width="2" stroke-linecap="round"/></svg>' },
+            { name: { en: "Windy", fr: "Venteux" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 12h14M7 15l-2 2M17 15l2 2" stroke="#B0C4DE" stroke-width="2" stroke-linecap="round"/><path d="M4 10a3 3 0 110 6h16a3 3 0 110-6H4z" fill="#B0C4DE"/></svg>' },
+            { name: { en: "Night (Moon)", fr: "Nuit (Lune)" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.12-1.36a5.5 5.5 0 01-1.84-8.88C19.1 3.51 15.7 2 12 2z" fill="#FFD700"/><circle cx="18" cy="6" r="1.5" fill="#FFFFFF"/><circle cx="15" cy="3" r="1" fill="#FFFFFF"/><circle cx="21" cy="10" r="1" fill="#FFFFFF"/></svg>' },
+
+            // Season Icons (similar to image_e56cdc.png)
+            { name: { en: "Summer", fr: "Été" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="summerSunGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFC107"/><stop offset="100%" stop-color="#FF8F00"/></linearGradient></defs><circle cx="12" cy="12" r="6" fill="url(#summerSunGrad)"/><path d="M12 2v2m0 16v2m8-10h2M2 12h2m14.364-7.364l-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 6.05l1.414-1.414M6.05 6.05L4.636 4.636" stroke="#FF8F00" stroke-width="1.5" stroke-linecap="round"/></svg>' },
+            { name: { en: "Spring", fr: "Printemps" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="#9CCC65"/><path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" fill="#FF69B4" stroke="#C2185B" stroke-width="1.5"/></svg>' },
+            { name: { en: "Autumn", fr: "Automne" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.41 6.59c-.39-.39-1.02-.39-1.41 0L12 10.59 8.01 6.59c-.39-.39-1.02-.39-1.41 0s-.39 1.02 0 1.41L10.59 12 6.59 15.99c-.39.39-.39 1.02 0 1.41s1.02.39 1.41 0L12 13.41l3.99 3.99c.39.39 1.02.39 1.41 0s.39-1.02 0-1.41L13.41 12l3.99-3.99c.39-.39.39-1.02 0-1.41z" fill="#FFA500" stroke="#E65100" stroke-width="1.5"/><path d="M12 13.41l-1.5-1.5-1.5 1.5-1.5-1.5-1.5 1.5-1.5-1.5L6.59 12 12 6.59 17.41 12 12 17.41z" fill="#D2691E"/></svg>' },
+            { name: { en: "Winter", fr: "Hiver" }, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM12 8a4 4 0 100 8 4 4 0 000-8z" fill="#ADD8E6" stroke="#64B5F6" stroke-width="1.5"/><path d="M12 8v8m-4-4h8m-4-4l2 4m-2 0l-2-4" stroke="#64B5F6" stroke-width="1.5" stroke-linecap="round"/></svg>' }
+        ];
+
+
+        const content = {
+            "en": {
+                mainTitle: "🌅 Morning Reflection",
+                reminderPrefix: "", /* Removed "Reminder:" */
+                scriptureTitle: "Scripture of the Day",
+                verseReflectionTitle: "What does this verse mean to me today?",
+                verseReflectionPlaceholder: "Write your thoughts here",
+                personalPrayerTitle: "Personal Prayer",
+                personalPrayerSubtitle: "Talk to God about your hopes and needs today. Here's a suggestion to inspire you:",
+                spiritualChallengeTitle: "Spiritual Challenge of the Day:",
+                gratitudeTitle: "Gratitude Prompt",
+                gratitudeSubtitle: "Today, I am thankful for...",
+                emojiInstructions: "Choose up to 4 emojis that represent your gratitude today:",
+                gratitudePlaceholder: "Write your list here",
+                actionStepTitle: "Action Step",
+                actionStepSubtitle: "One way I will live out today’s verse is...",
+                actionInstructions: "Choose up to 2 action steps to focus on today:",
+                actionStepPlaceholder: "Elaborate on your chosen action steps or write your own here.",
+                visualSpaceTitle: "Visual Space",
+                visualSpaceSubtitle: "Sketch, doodle, or paste an image that reflects your morning inspiration.",
+                drawingToolsTitle: "Drawing Tools:",
+                penColorLabel: "Pen Color",
+                penSizeLabel: "Size:",
+                clearCanvasButtonText: "Clear Canvas",
+                presetIconsTitle: "Preset Icons:",
+                pasteImageInfo: "(Note: Pasting images directly from clipboard is not supported in this simple version. Click an icon, then click the canvas to stamp it.)",
+                daily: {
+                    "Monday": {
+                        scripture: {
+                            text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight.",
+                            reference: "Proverbs 3:5-6"
+                        },
+                        prayerSuggestion: "Heavenly Father, on this Monday, I come before You seeking strength and guidance. Help me to trust in Your wisdom completely, even when I don't understand Your plan. Guide my steps today and make my path straight according to Your will. Amen.",
+                        reminder: "You are not walking alone. God is lighting the path, even when it curves.",
+                        spiritualChallengeTheme: "Strength & Guidance",
+                        spiritualChallengePrompt: "Consider a specific area where you tend to rely on your own understanding. How can you intentionally surrender that to God today?"
                     },
-                    prayerSuggestion: "Heavenly Father, on this Monday, I come before You seeking strength and guidance. Help me to trust in Your wisdom completely, even when I don't understand Your plan. Guide my steps today and make my path straight according to Your will. Amen.",
-                    reminder: "Peace isn’t the absence of fear—it’s the presence of God.",
-                    spiritualChallengeTheme: "STRENGTH & GUIDANCE",
-                    spiritualChallengePrompt: "Consider a specific area where you tend to rely on your own understanding. How can you intentionally surrender that to God today?",
-                    gratitudeSuggestion: "Think of three things that represent God's guidance in your life.",
-                    actionStepSuggestion: "Choose one task today where you will consciously rely on God's strength instead of your own."
-                },
-                "Tuesday": {
-                    scripture: {
-                        text: "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?",
-                        reference: "Psalm 27:1"
+                    "Tuesday": {
+                        scripture: {
+                            text: "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?",
+                            reference: "Psalm 27:1"
+                        },
+                        prayerSuggestion: "Lord, today I seek Your peace and comfort. Be my light in any darkness and my salvation from all fear. I declare You as the stronghold of my life. Help me to walk in courage and find rest in Your presence. Amen.",
+                        reminder: "Peace isn’t the absence of fear—it’s the presence of God.",
+                        spiritualChallengeTheme: "Peace & Comfort",
+                        spiritualChallengePrompt: "Identify a situation causing you anxiety. How can you invite God's peace into it?"
                     },
-                    prayerSuggestion: "Lord, today I seek Your peace and comfort. Be my light in any darkness and my salvation from all fear. I declare You as the stronghold of my life. Help me to walk in courage and find rest in Your presence. Amen.",
-                    reminder: "Waiting isn’t wasting—it’s preparing.",
-                    spiritualChallengeTheme: "PEACE & COMFORT",
-                    spiritualChallengePrompt: "Identify a situation causing you anxiety. How can you invite God's peace into it?",
-                    gratitudeSuggestion: "List ways God has brought comfort into your life recently.",
-                    actionStepSuggestion: "Practice a moment of stillness today, intentionally focusing on God's presence as your source of peace."
-                },
-                "Wednesday": {
-                    scripture: {
-                        text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",
-                        reference: "Isaiah 40:31"
+                    "Wednesday": {
+                        scripture: {
+                            text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",
+                            reference: "Isaiah 40:31"
+                        },
+                        prayerSuggestion: "Gracious God, as I face this Wednesday, I pray for renewed strength and fresh perspective. Help me to hope in You, knowing that You will lift me up and enable me to overcome weariness. Grant me the patience to wait on Your timing. Amen.",
+                        reminder: "Waiting isn’t wasting—it’s preparing.",
+                        spiritualChallengeTheme: "Patience & Perspective",
+                        spiritualChallengePrompt: "What is one area where you need to release control and trust God's timing?"
                     },
-                    prayerSuggestion: "Gracious God, as I face this Wednesday, I pray for renewed strength and fresh perspective. Help me to hope in You, knowing that You will lift me up and enable me to overcome weariness. Grant me the patience to wait on Your timing. Amen.",
-                    reminder: "Renewal begins with release.",
-                    spiritualChallengeTheme: "PATIENCE & PERSPECTIVE",
-                    spiritualChallengePrompt: "What is one area where you need to release control and trust God's timing?",
-                    gratitudeSuggestion: "Reflect on a time when God renewed your strength or gave you a new perspective.",
-                    actionStepSuggestion: "Today, try to approach a challenging situation with a renewed sense of hope and patience."
-                },
-                "Thursday": {
-                    scripture: {
-                        text: "Create in me a pure heart, O God, and renew a steadfast spirit within me.",
-                        reference: "Psalm 51:10"
+                    "Thursday": {
+                        scripture: {
+                            text: "Create in me a pure heart, O God, and renew a steadfast spirit within me.",
+                            reference: "Psalm 51:10"
+                        },
+                        prayerSuggestion: "Merciful Father, on this Thursday, I come seeking Your forgiveness and renewal. Cleanse my heart and renew a steadfast spirit within me. Help me to walk in integrity and to reflect Your purity in all I do. Amen.",
+                        reminder: "Renewal begins with release.",
+                        spiritualChallengeTheme: "Forgiveness & Renewal",
+                        spiritualChallengePrompt: "Is there anyone you need to forgive, or an area where you need God's forgiveness and renewal?"
                     },
-                    prayerSuggestion: "Merciful Father, on this Thursday, I come seeking Your forgiveness and renewal. Cleanse my heart and renew a steadfast spirit within me. Help me to walk in integrity and to reflect Your purity in all I do. Amen.",
-                    reminder: "Every act of compassion is a reflection of God’s love.",
-                    spiritualChallengeTheme: "FORGIVENESS & RENEWAL",
-                    spiritualChallengePrompt: "Is there anyone you need to forgive, or an area where you need God's forgiveness and renewal?",
-                    gratitudeSuggestion: "Give thanks for God's endless mercy and grace in your life.",
-                    actionStepSuggestion: "Take a step towards reconciliation or seek forgiveness where needed today."
-                },
-                "Friday": {
-                    scripture: {
-                        text: "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.",
-                        reference: "Ephesians 4:32"
+                    "Friday": {
+                        scripture: {
+                            text: "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.",
+                            reference: "Ephesians 4:32"
+                        },
+                        prayerSuggestion: "Loving God, as the week draws to a close, fill my heart with Your love and compassion. Help me to be kind and understanding towards others, extending forgiveness as You have so freely given it to me. May my actions reflect Your boundless love. Amen.",
+                        reminder: "Every act of compassion is a reflection of God’s love.",
+                        spiritualChallengeTheme: "Love & Compassion",
+                        spiritualChallengePrompt: "How can you show intentional kindness or compassion to someone today?"
                     },
-                    prayerSuggestion: "Loving God, as the week draws to a close, fill my heart with Your love and compassion. Help me to be kind and understanding towards others, extending forgiveness as You have so freely given it to me. May my actions reflect Your boundless love. Amen.",
-                    reminder: "Let go. Breathe. Rest. God is still working while you sleep.",
-                    spiritualChallengeTheme: "LOVE & COMPASSION",
-                    spiritualChallengePrompt: "How can you show intentional kindness or compassion to someone today?",
-                    gratitudeSuggestion: "Think of someone who has shown you great kindness or compassion.",
-                    actionStepSuggestion: "Perform a small act of kindness for someone without expecting anything in return."
-                },
-                "Saturday": {
-                    scripture: {
-                        text: "Come to me, all you who are weary and burdened, and I will give you rest.",
-                        reference: "Matthew 11:28"
+                    "Saturday": {
+                        scripture: {
+                            text: "Come to me, all you who are weary and burdened, and I will give you rest.",
+                            reference: "Matthew 11:28"
+                        },
+                        prayerSuggestion: "Resting Father, on this Saturday, I lay my weariness and burdens before You. I come seeking the rest only You can provide. Help me to surrender my worries and trust in Your unfailing care. Refresh my soul and spirit. Amen.",
+                        reminder: "Let go. Breathe. Rest. God is still working while you sleep.",
+                        spiritualChallengeTheme: "Rest & Surrender",
+                        spiritualChallengePrompt: "What burden can you intentionally surrender to God today to find rest?"
                     },
-                    prayerSuggestion: "Resting Father, on this Saturday, I lay my weariness and burdens before You. I come seeking the rest only You can provide. Help me to surrender my worries and trust in Your unfailing care. Refresh my soul and spirit. Amen.",
-                    reminder: "Celebration is a sacred rhythm. Let joy flow freely today.",
-                    spiritualChallengeTheme: "REST & SURRENDER",
-                    spiritualChallengePrompt: "What burden can you intentionally surrender to God today to find rest?",
-                    gratitudeSuggestion: "List the ways God has provided rest and relief in your life.",
-                    actionStepSuggestion: "Dedicate time today to true rest, whether it's physical, mental, or spiritual."
-                },
-                "Sunday": {
-                    scripture: {
-                        text: "This is the day that the Lord has made; let us rejoice and be glad in it.",
-                        reference: "Psalm 118:24"
-                    },
-                    prayerSuggestion: "Joyful Lord, on this blessed Sunday, I rejoice in the day You have made. Fill my heart with gladness and my spirit with worship. Help me to celebrate Your goodness and to share Your joy with those around me. Amen.",
-                    reminder: "Peace isn’t the absence of fear—it’s the presence of God.", // Reusing Monday's reminder for Sunday as no specific one was given.
-                    spiritualChallengeTheme: "JOY & WORSHIP",
-                    spiritualChallengePrompt: "How can you intentionally cultivate joy and express worship today?",
-                    gratitudeSuggestion: "Reflect on all the blessings from the past week and give thanks.",
-                    actionStepSuggestion: "Engage in an act of worship or celebration that brings you joy today."
+                    "Sunday": {
+                        scripture: {
+                            text: "This is the day that the Lord has made; let us rejoice and be glad in it.",
+                            reference: "Psalm 118:24"
+                        },
+                        prayerSuggestion: "Joyful Lord, on this blessed Sunday, I rejoice in the day You have made. Fill my heart with gladness and my spirit with worship. Help me to celebrate Your goodness and to share Your joy with those around me. Amen.",
+                        reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
+                        spiritualChallengeTheme: "Joie et Adoration",
+                        spiritualChallengePrompt: "How can you intentionally cultivate joy and express worship today?"
+                    }
                 }
+            },
+            "fr": {
+                mainTitle: "🌅 Réflexion Matinale",
+                reminderPrefix: "", /* Removed "Rappel :" */
+                scriptureTitle: "Écriture du Jour",
+                verseReflectionTitle: "Que signifie ce verset pour moi aujourd'sui ?",
+                verseReflectionPlaceholder: "Écrivez vos pensées ici",
+                personalPrayerTitle: "Prière Personnelle",
+                personalPrayerSubtitle: "Parlez à Dieu de vos espoirs et de vos besoins aujourd'hui. Voici une suggestion pour vous inspirer :",
+                spiritualChallengeTitle: "Défi Spirituel du Jour :",
+                gratitudeTitle: "Invite à la Gratitude",
+                gratitudeSubtitle: "Aujourd'hui, je suis reconnaissant(e) pour...",
+                emojiInstructions: "Choisissez jusqu'à 4 émojis qui représentent votre gratitude aujourd'hui :",
+                gratitudePlaceholder: "Écrivez votre liste ici",
+                actionStepTitle: "Étape d'Action",
+                actionStepSubtitle: "Une façon de vivre le verset d'aujourd'hui est...",
+                actionInstructions: "Choisissez jusqu'à 2 étapes d'action sur lesquelles vous concentrer aujourd'hui :",
+                actionStepPlaceholder: "Élaborez sur vos étapes d'action choisies ou écrivez les vôtres ici.",
+                visualSpaceTitle: "Espace Visuel",
+                visualSpaceSubtitle: "Dessinez, gribouillez ou collez une image qui reflète votre inspiration matinale.",
+                drawingToolsTitle: "Outils de Dessin :",
+                penColorLabel: "Couleur du Stylo",
+                penSizeLabel: "Taille :",
+                clearCanvasButtonText: "Effacer le Canevas",
+                presetIconsTitle: "Icônes Prédéfinies :",
+                pasteImageInfo: "(Note : Le collage d'images directement depuis le presse-papiers n'est pas pris en charge dans cette version simple. Cliquez sur une icône, puis sur le canevas pour l'estampiller.)",
+                daily: {
+                    "Monday": {
+                        scripture: {
+                            text: "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse; reconnais-le dans toutes tes voies, et il aplanira tes sentiers.",
+                            reference: "Proverbes 3:5-6"
+                        },
+                        prayerSuggestion: "Père Céleste, en ce lundi, je viens devant Toi cherchant force et direction. Aide-moi à me confier entièrement en Ta sagesse, même lorsque je ne comprends pas Ton plan. Guide mes pas aujourd'hui et rends mes chemins droits selon Ta volonté. Amen.",
+                        reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
+                        spiritualChallengeTheme: "Force et Direction",
+                        spiritualChallengePrompt: "Considérez un domaine spécifique où vous avez tendance à vous fier à votre propre compréhension. Comment pouvez-vous intentionnellement abandonner cela à Dieu aujourd'hui ?"
+                    },
+                    "Tuesday": {
+                        scripture: {
+                            text: "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? L'Éternel est le soutien de ma vie : de qui aurais-je peur ?",
+                            reference: "Psalm 27:1"
+                        },
+                        prayerSuggestion: "Seigneur, aujourd'hui je cherche Ta paix et Ton réconfort. Sois ma lumière dans toute obscurité et mon salut contre toute peur. Je Te déclare comme la forteresse de ma vie. Aide-moi à marcher avec courage et à trouver le repos en Ta présence. Amen.",
+                        reminder: "Attendre n'est pas perdre son temps, c'est se préparer.",
+                        spiritualChallengeTheme: "Paix et Réconfort",
+                        spiritualChallengePrompt: "Identifiez une situation qui vous cause de l'anxiété. Comment pouvez-vous y inviter la paix de Dieu ?"
+                    },
+                    "Wednesday": {
+                        scripture: {
+                            text: "Mais ceux qui s'attendent à l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles; ils courent et ne se lassent point, ils marchent et ne se fatiguent point.",
+                            reference: "Ésaïe 40:31"
+                        },
+                        prayerSuggestion: "Dieu bienveillant, alors que j'affronte ce mercredi, je prie pour une force renouvelée et une nouvelle perspective. Aide-moi à espérer en Toi, sachant que Tu me relèveras et me permettras de surmonter la fatigue. Accorde-moi la patience d'attendre Ton timing. Amen.",
+                        reminder: "Le renouveau commence par le lâcher-prise.",
+                        spiritualChallengeTheme: "Patience et Perspective",
+                        spiritualChallengePrompt: "Quel est un domaine où vous devez lâcher prise et faire confiance au timing de Dieu ?"
+                    },
+                    "Thursday": {
+                        scripture: {
+                            text: "Ô Dieu ! crée en moi un cœur pur, et renouvelle en moi un esprit bien disposé.",
+                            reference: "Psaume 51:10"
+                        },
+                        prayerSuggestion: "Père miséricordieux, en ce jeudi, je viens chercher Ton pardon et Ton renouveau. Purifie mon cœur et renouvelle un esprit ferme en moi. Aide-moi à marcher avec intégrité et à refléter Ta pureté in all I do. Amen.",
+                        reminder: "Chaque acte de compassion est un reflet de l'amour de Dieu.",
+                        spiritualChallengeTheme: "Pardon et Renouveau",
+                        spiritualChallengePrompt: "Y a-t-il quelqu'un que vous devez pardonner, ou un domaine où vous avez besoin du pardon et du renouveau de Dieu ?"
+                    },
+                    "Friday": {
+                        scripture: {
+                            text: "Soyez bons les uns envers les autres, compatissants, vous pardonnant réciproquement, comme Dieu vous a pardonné en Christ.",
+                            reference: "Éphésiens 4:32"
+                        },
+                        prayerSuggestion: "Dieu aimant, alors que la semaine touche à sa fin, remplis mon cœur de Ton amour et de Ta compassion. Aide-moi à être bon et compréhensif envers les autres, en accordant le pardon comme Tu me l'as si librement donné. Que mes actions reflètent Ton amour illimité. Amen.",
+                        reminder: "Lâchez prise. Respirez. Reposez-vous. Dieu travaille toujours pendant que vous dormez.",
+                        spiritualChallengeTheme: "Amour et Compassion",
+                        spiritualChallengePrompt: "Comment pouvez-vous faire preuve de gentillesse ou de compassion intentionnelle envers quelqu'un aujourd'hui ?"
+                    },
+                    "Saturday": {
+                        scripture: {
+                            text: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.",
+                            reference: "Matthieu 11:28"
+                        },
+                        prayerSuggestion: "Père reposant, en ce samedi, je dépose ma fatigue et mes fardeaux devant Toi. Je viens chercher le repos que Toi seul peux offrir. Aide-moi à abandonner mes soucis et à me confier à Tes soins infaillibles. Rafraîchis mon âme et mon esprit. Amen.",
+                        reminder: "La célébration est un rythme sacré. Laissez la joie couler librement aujourd'hui.",
+                        spiritualChallengeTheme: "Repos et Abandon",
+                        spiritualChallengePrompt: "Quel fardeau pouvez-vous intentionnellement abandonner à Dieu aujourd'hui pour trouver le repos ?"
+                    },
+                    "Sunday": {
+                        scripture: {
+                            text: "C'est ici la journée que l'Éternel a faite : Qu'elle soit pour nous un sujet d'allégresse et de joie !",
+                            reference: "Psaume 118:24"
+                        },
+                        prayerSuggestion: "Seigneur joyeux, en ce dimanche béni, je me réjouis du jour que Tu as fait. Remplis mon cœur de joie et mon esprit d'adoration. Aide-moi à célébrer Ta bonté et à partager Ta joie avec ceux qui m'entourent. Amen.",
+                        reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
+                        spiritualChallengeTheme: "Joie et Adoration",
+                        spiritualChallengePrompt: "Comment pouvez-vous intentionnellement cultiver la joie et exprimer l'adoration aujourd'hui ?"
+                    }
+                }
+            }
+        };
+
+        // --- Canvas Drawing Variables ---
+        let canvas, ctx;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let penColor = '#000000';
+        let penSize = 2;
+        let activePresetIcon = null; // Stores the SVG string for the currently selected preset icon
+
+        /**
+         * Initializes the canvas for drawing.
+         */
+        const initializeCanvas = () => {
+            canvas = document.getElementById('drawingCanvas');
+            ctx = canvas.getContext('2d');
+
+            // Set canvas dimensions to fill its container
+            const setCanvasDimensions = () => {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                // Redraw content if any, after resize (for persistent drawings, would need to save state)
+                // For this basic version, resizing clears the canvas.
+                ctx.fillStyle = '#ffffff'; // Set background to white
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
             };
 
-            // Get the content for the current day, default to Monday if dayName is not found
-            const currentDayData = dailyContent[dayName] || dailyContent["Monday"];
+            setCanvasDimensions(); // Set initial dimensions
+            window.addEventListener('resize', setCanvasDimensions); // Adjust on resize
 
-            // Update Reminder
-            document.getElementById('daily-reminder').textContent = currentDayData.reminder;
+            // Drawing event listeners for mouse
+            canvas.addEventListener('mousedown', (e) => {
+                if (activePresetIcon) {
+                    drawPresetIconOnCanvas(e.offsetX, e.offsetY, activePresetIcon);
+                    activePresetIcon = null; // Deselect icon after drawing
+                    generatePresetIconButtons(); // Re-render buttons to show deselection
+                    canvas.style.cursor = 'crosshair'; // Reset cursor
+                    return;
+                }
+                isDrawing = true;
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            });
 
-            // Update Scripture
-            document.getElementById('scripture-text').textContent = currentDayData.scripture.text;
-            document.getElementById('scripture-reference').textContent = currentDayData.scripture.reference;
+            canvas.addEventListener('mousemove', (e) => {
+                if (!isDrawing) return;
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.strokeStyle = penColor;
+                ctx.lineWidth = penSize;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                [lastX, lastY] = [e.offsetX, e.offsetY];
+            });
 
-            // Update Prayer Suggestion
-            document.getElementById('prayer-textarea').placeholder = currentDayData.prayerSuggestion;
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mouseout', () => isDrawing = false); // Stop drawing if mouse leaves canvas
 
-            // Update Spiritual Challenge
-            document.getElementById('challenge-theme').textContent = currentDayData.spiritualChallengeTheme;
-            document.getElementById('challenge-prompt').textContent = currentDayData.spiritualChallengePrompt;
-            document.getElementById('spiritual-challenge-textarea').placeholder = currentDayData.spiritualChallengePrompt;
+            // Drawing event listeners for touch
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
 
-            // Update Gratitude Prompt
-            document.getElementById('gratitude-textarea').placeholder = currentDayData.gratitudeSuggestion;
+                if (activePresetIcon) {
+                    drawPresetIconOnCanvas(x, y, activePresetIcon);
+                    activePresetIcon = null; // Deselect icon after drawing
+                    generatePresetIconButtons(); // Re-render buttons to show deselection
+                    canvas.style.cursor = 'crosshair'; // Reset cursor
+                    return;
+                }
+                isDrawing = true;
+                [lastX, lastY] = [x, y];
+            }, { passive: false });
 
-            // Update Action Step
-            document.getElementById('action-step-textarea').placeholder = currentDayData.actionStepSuggestion;
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // Prevent scrolling
+                if (!isDrawing) return;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = penColor;
+                ctx.lineWidth = penSize;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                [lastX, lastY] = [x, y];
+            }, { passive: false });
+
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchcancel', () => isDrawing = false);
+
+            // Pen color and size controls
+            document.getElementById('penColor').addEventListener('input', (e) => {
+                penColor = e.target.value;
+            });
+            document.getElementById('penSize').addEventListener('input', (e) => {
+                penSize = parseInt(e.target.value);
+                document.getElementById('penSizeValue').textContent = penSize;
+            });
+            document.getElementById('clearCanvas').addEventListener('click', () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ffffff'; // Reset background to white after clearing
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            });
+        };
+
+        /**
+         * Draws a selected preset SVG icon onto the canvas at specified coordinates.
+         * @param {number} x - X coordinate on canvas.
+         * @param {number} y - Y coordinate on canvas.
+         * @param {string} svgString - The SVG string to draw.
+         */
+        const drawPresetIconOnCanvas = (x, y, svgString) => {
+            const img = new Image();
+            const svgDataUrl = 'data:image/svg+xml;base64,' + btoa(svgString);
+
+            img.onload = () => {
+                const iconSize = 50; // pixels
+                ctx.drawImage(img, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
+            };
+            img.src = svgDataUrl;
+        };
+
+        /**
+         * Generates and renders preset icon buttons.
+         */
+        const generatePresetIconButtons = () => {
+            const presetIconContainer = document.getElementById('preset-icon-container');
+            presetIconContainer.innerHTML = ''; // Clear existing buttons
+
+            presetIcons.forEach(icon => {
+                const button = document.createElement('button');
+                button.classList.add('preset-icon-button'); // Apply common styling class
+                button.innerHTML = icon.svg; // Set innerHTML to the SVG string
+
+                // Add a title for accessibility and hover tooltip
+                button.title = icon.name[currentLanguage];
+
+                if (activePresetIcon === icon.svg) {
+                    button.classList.add('selected'); // Highlight selected preset icon button
+                } else {
+                    button.classList.remove('selected'); // Ensure it's not selected
+                }
+
+                button.addEventListener('click', () => {
+                    // Deselect previous if any
+                    if (activePresetIcon) {
+                        const prevSelectedButton = presetIconContainer.querySelector(`.preset-icon-button.selected`);
+                        if (prevSelectedButton) {
+                            prevSelectedButton.classList.remove('selected');
+                        }
+                    }
+
+                    if (activePresetIcon === icon.svg) {
+                        // If clicking the same icon, deselect it
+                        activePresetIcon = null;
+                        canvas.style.cursor = 'crosshair'; // Reset cursor
+                    } else {
+                        // Select new icon
+                        activePresetIcon = icon.svg;
+                        button.classList.add('selected'); // Apply selected class to the new button
+                        canvas.style.cursor = 'copy'; // Change cursor to indicate stamping
+                    }
+                });
+                presetIconContainer.appendChild(button);
+            });
+        };
+
+
+        /**
+         * Updates the display area with the currently selected emojis.
+         */
+        const updateSelectedEmojisDisplay = () => {
+            document.getElementById('selected-emojis-display').textContent = selectedEmojis.join(' ');
+        };
+
+        /**
+         * Toggles the selection of an emoji and updates the display.
+         * @param {string} emoji - The emoji character to toggle.
+         * @param {HTMLElement} button - The button element corresponding to the emoji.
+         */
+        const toggleEmojiSelection = (emoji, button) => {
+            const index = selectedEmojis.indexOf(emoji);
+            if (index > -1) {
+                // Emoji is already selected, so unselect it
+                selectedEmojis.splice(index, 1);
+                button.classList.remove('bg-blue-200', 'border-blue-500');
+                button.classList.add('bg-gray-100', 'border-gray-300');
+            } else {
+                // Emoji is not selected, try to select it
+                if (selectedEmojis.length < 4) {
+                    // Only allow selection if less than 4 emojis are already selected
+                    selectedEmojis.push(emoji);
+                    button.classList.add('bg-blue-200', 'border-blue-500');
+                    button.classList.remove('bg-gray-100', 'border-gray-300');
+                } else {
+                    // Optionally, provide user feedback that max selection is reached
+                    return;
+                }
+            }
+            updateSelectedEmojisDisplay(); // Update the display of selected emojis
+        };
+
+        /**
+         * Generates and renders all emoji buttons in the picker container.
+         * Attaches click listeners and sets initial styling based on selection.
+         */
+        const generateEmojiButtons = () => {
+            const emojiContainer = document.getElementById('emoji-picker-container');
+            emojiContainer.innerHTML = ''; // Clear any existing buttons
+
+            allEmojis.forEach(emoji => {
+                const emojiItemDiv = document.createElement('div');
+                emojiItemDiv.classList.add('flex', 'flex-col', 'items-center', 'justify-center', 'p-1', 'rounded-md'); // Container for emoji and name
+
+                const button = document.createElement('button');
+                button.textContent = emoji;
+                button.classList.add(
+                    'emoji-button', 'p-2', 'rounded-full', 'text-2xl', 'border-2',
+                    'transition', 'duration-150', 'ease-in-out', 'hover:scale-110'
+                );
+                // Set initial styling based on whether the emoji is currently selected
+                if (selectedEmojis.includes(emoji)) {
+                    button.classList.add('bg-blue-200', 'border-blue-500');
+                } else {
+                    button.classList.add('bg-gray-100', 'border-gray-300');
+                }
+                // Add click event listener to toggle selection
+                button.addEventListener('click', () => toggleEmojiSelection(emoji, button));
+
+                const emojiNameSpan = document.createElement('span');
+                emojiNameSpan.classList.add('text-xs', 'text-gray-600', 'mt-1', 'text-center', 'emoji-name');
+                // Ensure emojiNames[emoji] exists before trying to access properties
+                emojiNameSpan.textContent = emojiNames[emoji] ? emojiNames[emoji][currentLanguage] : '';
+
+                emojiItemDiv.appendChild(button);
+                emojiItemDiv.appendChild(emojiNameSpan);
+                emojiContainer.appendChild(emojiItemDiv);
+            });
+        };
+
+        /**
+         * Updates the display area with the currently selected action steps.
+         */
+        const updateSelectedActionStepsDisplay = () => {
+            document.getElementById('selected-action-steps-display').textContent = selectedActionSteps.join(' • ');
+        };
+
+        /**
+         * Toggles the selection of an action step and updates the display.
+         * @param {string} actionStep - The action step phrase to toggle.
+         * @param {HTMLElement} button - The button element corresponding to the action step.
+         */
+        const toggleActionStepSelection = (actionStep, button) => {
+            const index = selectedActionSteps.indexOf(actionStep);
+            // Remove all color classes from the button first to reset it
+            actionStepColorClasses.forEach(colorClass => button.classList.remove(colorClass));
+
+            if (index > -1) {
+                // Action step is already selected, so unselect it
+                selectedActionSteps.splice(index, 1);
+                button.classList.remove('selected'); // Remove the generic 'selected' class
+            } else {
+                // Action step is not selected, try to select it
+                if (selectedActionSteps.length < 2) { // Limit to 2 action steps
+                    selectedActionSteps.push(actionStep);
+                    button.classList.add('selected'); // Add generic 'selected' class
+
+                    // Assign a unique color based on its position in the *currently selected* array
+                    const colorIndex = selectedActionSteps.indexOf(actionStep); // Get its position in the selected array
+                    button.classList.add(actionStepColorClasses[colorIndex % actionStepColorClasses.length]);
+                } else {
+                    // Optionally, provide user feedback that max selection is reached
+                    return;
+                }
+            }
+            // After modifying selectedActionSteps, re-render all buttons to ensure correct colors are applied
+            // to previously selected items whose positions might have shifted.
+            generateActionStepButtons();
+            updateSelectedActionStepsDisplay(); // Update the display of selected action steps
+        };
+
+
+        /**
+         * Generates and renders all action step buttons in the picker container.
+         * Attaches click listeners and sets initial styling based on selection.
+         */
+        const generateActionStepButtons = () => {
+            const actionStepContainer = document.getElementById('action-step-picker-container');
+            actionStepContainer.innerHTML = ''; // Clear any existing buttons
+
+            allActionSteps.forEach(action => {
+                const button = document.createElement('button');
+                button.textContent = action[currentLanguage];
+                button.classList.add('action-step-button');
+
+                // Check if this action step is currently selected
+                const isSelected = selectedActionSteps.includes(action[currentLanguage]);
+                if (isSelected) {
+                    // Find the index of this action step in the selectedActionSteps array
+                    const selectedIndex = selectedActionSteps.indexOf(action[currentLanguage]);
+                    // Apply the corresponding color class
+                    const colorClass = actionStepColorClasses[selectedIndex % actionStepColorClasses.length];
+                    button.classList.add(colorClass);
+                    button.classList.add('selected'); // Also add the generic 'selected' class
+                }
+                
+                // Add click event listener to toggle selection
+                button.addEventListener('click', () => toggleActionStepSelection(action[currentLanguage], button));
+                actionStepContainer.appendChild(button);
+            });
+        };
+
+        /**
+         * Updates all dynamic content on the page based on the selected language.
+         * @param {string} lang - The language code ('en' or 'fr').
+         */
+        const updateContent = (lang) => {
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const today = new Date();
+            const dayName = days[today.getDay()];
+            // Get daily content for the current day, defaulting to Monday if not found
+            const dailyData = content[lang].daily[dayName] || content[lang].daily["Monday"];
+
+            // Update static elements based on language
+            document.getElementById('main-title').textContent = content[lang].mainTitle;
+            document.getElementById('scripture-title').textContent = content[lang].scriptureTitle;
+            document.getElementById('verse-reflection-title').textContent = content[lang].verseReflectionTitle;
+            document.getElementById('verse-reflection-textarea').placeholder = content[lang].verseReflectionPlaceholder;
+            document.getElementById('personal-prayer-title').textContent = content[lang].personalPrayerTitle;
+            document.getElementById('personal-prayer-subtitle').textContent = content[lang].personalPrayerSubtitle;
+            document.getElementById('gratitude-title').textContent = content[lang].gratitudeTitle;
+            document.getElementById('gratitude-subtitle').textContent = content[lang].gratitudeSubtitle;
+            document.getElementById('emoji-instructions').textContent = content[lang].emojiInstructions; // New emoji instructions
+            document.getElementById('gratitude-textarea').placeholder = content[lang].gratitudePlaceholder;
+
+            // Action Step section updates
+            document.getElementById('action-step-title').textContent = content[lang].actionStepTitle;
+            document.getElementById('action-step-subtitle').textContent = content[lang].actionStepSubtitle;
+            document.getElementById('action-instructions').textContent = content[lang].actionInstructions;
+            document.getElementById('action-step-textarea').placeholder = content[lang].actionStepPlaceholder;
+
+            // Visual Space section updates
+            document.getElementById('visual-space-title').textContent = content[lang].visualSpaceTitle;
+            document.getElementById('visual-space-subtitle').textContent = content[lang].visualSpaceSubtitle;
+            document.getElementById('drawing-tools-title').textContent = content[lang].drawingToolsTitle;
+            document.getElementById('pen-color-label').textContent = content[lang].penColorLabel;
+            document.getElementById('pen-size-label').innerHTML = `${content[lang].penSizeLabel} <span id="penSizeValue">${penSize}</span>px`;
+            document.getElementById('clear-canvas-button-text').textContent = content[lang].clearCanvasButtonText;
+            document.getElementById('preset-icons-title').textContent = content[lang].presetIconsTitle;
+            document.getElementById('paste-image-info').textContent = content[lang].pasteImageInfo;
+
+
+            // Update dynamic daily content
+            // Removed the reminderPrefix from the display text
+            document.getElementById('daily-reminder').textContent = dailyData.reminder;
+            document.getElementById('scripture-text').textContent = dailyData.scripture.text;
+            document.getElementById('scripture-reference').textContent = dailyData.scripture.reference;
+            document.getElementById('prayer-textarea').placeholder = dailyData.prayerSuggestion;
+
+            // Get the element for the spiritual challenge title and check if it exists
+            const spiritualChallengeFullTitleElement = document.getElementById('spiritual-challenge-full-title');
+            if (spiritualChallengeFullTitleElement) {
+                spiritualChallengeFullTitleElement.textContent = content[lang].spiritualChallengeTitle + " " + dailyData.spiritualChallengeTheme;
+            } else {
+                console.error("Element with ID 'spiritual-challenge-full-title' not found.");
+            }
+
+            document.getElementById('challenge-prompt').textContent = dailyData.spiritualChallengePrompt;
+            document.getElementById('spiritual-challenge-textarea').placeholder = dailyData.spiritualChallengePrompt;
+
+            // Re-generate emoji buttons to ensure correct styling for selected/unselected states and update names
+            generateEmojiButtons();
+            updateSelectedEmojisDisplay(); // Ensure selected emojis are displayed after content update
+
+            // Re-generate action step buttons to ensure correct styling and language
+            generateActionStepButtons();
+            updateSelectedActionStepsDisplay(); // Ensure selected action steps are displayed
+
+            // Generate preset icon buttons for Visual Space
+            generatePresetIconButtons();
+
+
+            // Update language toggle button styling
+            if (lang === 'en') {
+                document.getElementById('lang-en').classList.add('bg-blue-500', 'text-white');
+                document.getElementById('lang-en').classList.remove('bg-gray-300', 'text-gray-800');
+                document.getElementById('lang-fr').classList.add('bg-gray-300', 'text-gray-800');
+                document.getElementById('lang-fr').classList.remove('bg-blue-500', 'text-white');
+            } else {
+                document.getElementById('lang-fr').classList.add('bg-blue-500', 'text-white');
+                document.getElementById('lang-fr').classList.remove('bg-gray-300', 'text-gray-800');
+                document.getElementById('lang-en').classList.add('bg-gray-300', 'text-gray-800');
+                document.getElementById('lang-en').classList.remove('bg-blue-500', 'text-white');
+            }
+        };
+
+        // Event listener for when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Detect browser language preference for initial load
+            const browserLang = navigator.language.split('-')[0];
+            if (browserLang === 'fr') {
+                currentLanguage = 'fr';
+            }
+
+            // Initialize Canvas and its drawing functionality
+            initializeCanvas();
+
+            // Generate buttons and update all content based on the initial language
+            generateEmojiButtons();
+            generateActionStepButtons(); // Generate action step buttons on load
+            generatePresetIconButtons(); // Generate preset icon buttons on load
+            updateContent(currentLanguage); // Call updateContent after all elements are generated
+            
+            // Add event listeners for language toggle buttons
+            document.getElementById('lang-en').addEventListener('click', () => {
+                currentLanguage = 'en';
+                updateContent('en');
+            });
+
+            document.getElementById('lang-fr').addEventListener('click', () => {
+                currentLanguage = 'fr';
+                updateContent('fr');
+            });
         });
     </script>
 </body>

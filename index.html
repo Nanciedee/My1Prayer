@@ -335,7 +335,7 @@
             "🙏": { en: "prayer", fr: "prière" },
             "💡": { en: "idea", fr: "idée" },
             "💧": { en: "refreshment", fr: "rafraîchissement" },
-            "�": { en: "learning", fr: "apprentissage" },
+            "📚": { en: "learning", fr: "apprentissage" },
             "🎶": { en: "music", fr: "musique" },
             "🎨": { en: "creativity", fr: "créativité" },
             "🌟": { en: "blessing", fr: "bénédiction" },
@@ -389,13 +389,12 @@
         const content = {
             "en": {
                 mainTitle: "🌅 Morning Reflection",
-                reminderPrefix: "", /* Removed "Reminder:" */
+                reminderPrefix: "",
                 scriptureTitle: "Scripture of the Day",
                 verseReflectionTitle: "What does this verse mean to me today?",
                 verseReflectionPlaceholder: "Write your thoughts here",
                 personalPrayerTitle: "Personal Prayer",
                 personalPrayerSubtitle: "Talk to God about your hopes and needs today. Here's a suggestion to inspire you:",
-                spiritualChallengeTitle: "Spiritual Challenge of the Day:",
                 gratitudeTitle: "Gratitude Prompt",
                 gratitudeSubtitle: "Today, I am thankful for...",
                 emojiInstructions: "Choose up to 4 emojis that represent your gratitude today:",
@@ -412,88 +411,237 @@
                 clearCanvasButtonText: "Clear Canvas",
                 presetIconsTitle: "Preset Icons:",
                 pasteImageInfo: "(Note: Pasting images directly from clipboard is not supported in this simple version. Click an icon, then click the canvas to stamp it.)",
-                daily: {
-                    "Monday": {
-                        scripture: {
-                            text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight.",
-                            reference: "Proverbs 3:5-6"
-                        },
-                        prayerSuggestion: "Heavenly Father, on this Monday, I come before You seeking strength and guidance. Help me to trust in Your wisdom completely, even when I don't understand Your plan. Guide my steps today and make my path straight according to Your will. Amen.",
+                dailyContent: [
+                    // Day 1
+                    {
+                        scripture: { text: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to Him, and He will make your paths straight.", reference: "Proverbs 3:5-6" },
                         reminder: "You are not walking alone. God is lighting the path, even when it curves.",
                         spiritualChallengeTheme: "Strength & Guidance",
                         spiritualChallengePrompt: "Consider a specific area where you tend to rely on your own understanding. How can you intentionally surrender that to God today?"
                     },
-                    "Tuesday": {
-                        scripture: {
-                            text: "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?",
-                            reference: "Psalm 27:1"
-                        },
-                        prayerSuggestion: "Lord, today I seek Your peace and comfort. Be my light in any darkness and my salvation from all fear. I declare You as the stronghold of my life. Help me to walk in courage and find rest in Your presence. Amen.",
+                    // Day 2
+                    {
+                        scripture: { text: "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?", reference: "Psalm 27:1" },
                         reminder: "Peace isn’t the absence of fear—it’s the presence of God.",
                         spiritualChallengeTheme: "Peace & Comfort",
                         spiritualChallengePrompt: "Identify a situation causing you anxiety. How can you invite God's peace into it?"
                     },
-                    "Wednesday": {
-                        scripture: {
-                            text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.",
-                            reference: "Isaiah 40:31"
-                        },
-                        prayerSuggestion: "Gracious God, as I face this Wednesday, I pray for renewed strength and fresh perspective. Help me to hope in You, knowing that You will lift me up and enable me to overcome weariness. Grant me the patience to wait on Your timing. Amen.",
+                    // Day 3
+                    {
+                        scripture: { text: "But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.", reference: "Isaiah 40:31" },
                         reminder: "Waiting isn’t wasting—it’s preparing.",
                         spiritualChallengeTheme: "Patience & Perspective",
                         spiritualChallengePrompt: "What is one area where you need to release control and trust God's timing?"
                     },
-                    "Thursday": {
-                        scripture: {
-                            text: "Create in me a pure heart, O God, and renew a steadfast spirit within me.",
-                            reference: "Psalm 51:10"
-                        },
-                        prayerSuggestion: "Merciful Father, on this Thursday, I come seeking Your forgiveness and renewal. Cleanse my heart and renew a steadfast spirit within me. Help me to walk in integrity and to reflect Your purity in all I do. Amen.",
+                    // Day 4
+                    {
+                        scripture: { text: "Create in me a pure heart, O God, and renew a steadfast spirit within me.", reference: "Psalm 51:10" },
                         reminder: "Renewal begins with release.",
                         spiritualChallengeTheme: "Forgiveness & Renewal",
                         spiritualChallengePrompt: "Is there anyone you need to forgive, or an area where you need God's forgiveness and renewal?"
                     },
-                    "Friday": {
-                        scripture: {
-                            text: "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.",
-                            reference: "Ephesians 4:32"
-                        },
-                        prayerSuggestion: "Loving God, as the week draws to a close, fill my heart with Your love and compassion. Help me to be kind and understanding towards others, extending forgiveness as You have so freely given it to me. May my actions reflect Your boundless love. Amen.",
+                    // Day 5
+                    {
+                        scripture: { text: "Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.", reference: "Ephesians 4:32" },
                         reminder: "Every act of compassion is a reflection of God’s love.",
                         spiritualChallengeTheme: "Love & Compassion",
                         spiritualChallengePrompt: "How can you show intentional kindness or compassion to someone today?"
                     },
-                    "Saturday": {
-                        scripture: {
-                            text: "Come to me, all you who are weary and burdened, and I will give you rest.",
-                            reference: "Matthew 11:28"
-                        },
-                        prayerSuggestion: "Resting Father, on this Saturday, I lay my weariness and burdens before You. I come seeking the rest only You can provide. Help me to surrender my worries and trust in Your unfailing care. Refresh my soul and spirit. Amen.",
+                    // Day 6
+                    {
+                        scripture: { text: "Come to me, all you who are weary and burdened, and I will give you rest.", reference: "Matthew 11:28" },
                         reminder: "Let go. Breathe. Rest. God is still working while you sleep.",
                         spiritualChallengeTheme: "Rest & Surrender",
                         spiritualChallengePrompt: "What burden can you intentionally surrender to God today to find rest?"
                     },
-                    "Sunday": {
-                        scripture: {
-                            text: "This is the day that the Lord has made; let us rejoice and be glad in it.",
-                            reference: "Psalm 118:24"
-                        },
-                        prayerSuggestion: "Joyful Lord, on this blessed Sunday, I rejoice in the day You have made. Fill my heart with gladness and my spirit with worship. Help me to celebrate Your goodness and to share Your joy with those around me. Amen.",
-                        reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
-                        spiritualChallengeTheme: "Joie et Adoration",
+                    // Day 7
+                    {
+                        scripture: { text: "This is the day that the Lord has made; let us rejoice and be glad in it.", reference: "Psalm 118:24" },
+                        reminder: "Joy is not merely an emotion; it's a spiritual choice.",
+                        spiritualChallengeTheme: "Joy & Worship",
                         spiritualChallengePrompt: "How can you intentionally cultivate joy and express worship today?"
+                    },
+                    // Day 8
+                    {
+                        scripture: { text: "I can do all things through Christ who strengthens me.", reference: "Philippians 4:13" },
+                        reminder: "Your strength comes from Him. Lean on it.",
+                        spiritualChallengeTheme: "Inner Strength",
+                        spiritualChallengePrompt: "Where do you feel weak today? How can you invite Christ's strength into that area?"
+                    },
+                    // Day 9
+                    {
+                        scripture: { text: "For I know the plans I have for you,” declares the Lord, “plans to prosper you and not to harm you, plans to give you hope and a future.", reference: "Jeremiah 29:11" },
+                        reminder: "God's plans for you are good, even when the path is unclear.",
+                        spiritualChallengeTheme: "Hope & Future",
+                        spiritualChallengePrompt: "What future hope are you holding onto? How does this verse encourage you?"
+                    },
+                    // Day 10
+                    {
+                        scripture: { text: "The steadfast love of the Lord never ceases; His mercies never come to an end; they are new every morning; great is Your faithfulness.", reference: "Lamentations 3:22-23" },
+                        reminder: "Every new day brings new mercies. Embrace them.",
+                        spiritualChallengeTheme: "Mercy & Faithfulness",
+                        spiritualChallengePrompt: "What new mercy can you recognize and be thankful for this morning?"
+                    },
+                    // Day 11
+                    {
+                        scripture: { text: "Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth.", reference: "Psalm 46:10" },
+                        reminder: "In stillness, you find God's presence and power.",
+                        spiritualChallengeTheme: "Stillness & Presence",
+                        spiritualChallengePrompt: "How can you create a moment of stillness today to connect with God?"
+                    },
+                    // Day 12
+                    {
+                        scripture: { text: "For where two or three gather in my name, there am I among them.", reference: "Matthew 18:20" },
+                        reminder: "God is with you, especially when you gather in His name.",
+                        spiritualChallengeTheme: "Community & Presence",
+                        spiritualChallengePrompt: "How can you foster a sense of God's presence in your interactions with others today?"
+                    },
+                    // Day 13
+                    {
+                        scripture: { text: "The Lord bless you and keep you; the Lord make His face shine upon you and be gracious to you; the Lord lift up His countenance upon you and give you peace.", reference: "Numbers 6:24-26" },
+                        reminder: "You are blessed, kept, and graced by the Lord.",
+                        spiritualChallengeTheme: "Blessing & Peace",
+                        spiritualChallengePrompt: "Reflect on a blessing you've received. How can you share that peace with someone else?"
+                    },
+                    // Day 14
+                    {
+                        scripture: { text: "But seek first His kingdom and His righteousness, and all these things will be given to you as well.", reference: "Matthew 6:33" },
+                        reminder: "Prioritize God, and everything else will fall into place.",
+                        spiritualChallengeTheme: "Priorities & Provision",
+                        spiritualChallengePrompt: "What is one thing you can prioritize today to seek God's kingdom first?"
+                    },
+                    // Day 15
+                    {
+                        scripture: { text: "A new command I give you: Love one another. As I have loved you, so you must love one another.", reference: "John 13:34" },
+                        reminder: "Love is an action, a daily choice.",
+                        spiritualChallengeTheme: "Love in Action",
+                        spiritualChallengePrompt: "How can you actively demonstrate love to someone in your life today?"
+                    },
+                    // Day 16
+                    {
+                        scripture: { text: "Be joyful in hope, patient in affliction, faithful in prayer.", reference: "Romans 12:12" },
+                        reminder: "Hope fuels joy, patience strengthens resolve, prayer connects you to power.",
+                        spiritualChallengeTheme: "Joy, Patience, Prayer",
+                        spiritualChallengePrompt: "Which of these three areas (hope, patience, prayer) needs your focus today?"
+                    },
+                    // Day 17
+                    {
+                        scripture: { text: "For God did not give us a spirit of timidity, but a spirit of power, of love and of a sound mind.", reference: "2 Timothy 1:7" },
+                        reminder: "You are equipped with power, love, and a sound mind.",
+                        spiritualChallengeTheme: "Courage & Clarity",
+                        spiritualChallengePrompt: "Where do you need to step out in power, love, or a sound mind today?"
+                    },
+                    // Day 18
+                    {
+                        scripture: { text: "The Lord is good, a stronghold in the day of trouble; He knows those who take refuge in Him.", reference: "Nahum 1:7" },
+                        reminder: "In times of trouble, God is your safe refuge.",
+                        spiritualChallengeTheme: "Refuge & Safety",
+                        spiritualChallengePrompt: "What troubles are you facing? How can you find refuge in God today?"
+                    },
+                    // Day 19
+                    {
+                        scripture: { text: "I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.", reference: "John 16:33" },
+                        reminder: "Troubles are inevitable, but peace is possible through Christ.",
+                        spiritualChallengeTheme: "Overcoming Trouble",
+                        spiritualChallengePrompt: "What challenge feels overwhelming? How can you find peace in Christ's victory?"
+                    },
+                    // Day 20
+                    {
+                        scripture: { text: "And we know that in all things God works for the good of those who love Him, who have been called according to His purpose.", reference: "Romans 8:28" },
+                        reminder: "Even in difficult circumstances, God is working for your good.",
+                        spiritualChallengeTheme: "Purpose & Goodness",
+                        spiritualChallengePrompt: "How can you see God's purpose unfolding even in unexpected situations today?"
+                    },
+                    // Day 21
+                    {
+                        scripture: { text: "The fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness, gentleness and self-control.", reference: "Galatians 5:22-23" },
+                        reminder: "Cultivate these fruits, and your life will flourish.",
+                        spiritualChallengeTheme: "Spiritual Fruit",
+                        spiritualChallengePrompt: "Which fruit of the Spirit do you want to intentionally grow today?"
+                    },
+                    // Day 22
+                    {
+                        scripture: { text: "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.", reference: "Philippians 4:6" },
+                        reminder: "Trade your anxiety for prayer and thanksgiving.",
+                        spiritualChallengeTheme: "Anxiety & Prayer",
+                        spiritualChallengePrompt: "What anxiety can you turn into a prayer of thanksgiving today?"
+                    },
+                    // Day 23
+                    {
+                        scripture: { text: "For it is by grace you have been saved, through faith—and this is not from yourselves, it is the gift of God—", reference: "Ephesians 2:8" },
+                        reminder: "Salvation is a gift, freely given by grace.",
+                        spiritualChallengeTheme: "Grace & Faith",
+                        spiritualChallengePrompt: "How can you live out your gratitude for God's grace today?"
+                    },
+                    // Day 24
+                    {
+                        scripture: { text: "I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.", reference: "Psalm 139:14" },
+                        reminder: "You are a masterpiece, wonderfully made by God.",
+                        spiritualChallengeTheme: "Self-Worth & Creation",
+                        spiritualChallengePrompt: "How can you affirm your unique value as God's creation today?"
+                    },
+                    // Day 25
+                    {
+                        scripture: { text: "The Lord is my shepherd; I shall not want.", reference: "Psalm 23:1" },
+                        reminder: "With God as your shepherd, all your needs are met.",
+                        spiritualChallengeTheme: "Provision & Contentment",
+                        spiritualChallengePrompt: "What need can you trust God to provide for today?"
+                    },
+                    // Day 26
+                    {
+                        scripture: { text: "Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!", reference: "2 Corinthians 5:17" },
+                        reminder: "Embrace the newness that Christ offers you daily.",
+                        spiritualChallengeTheme: "New Beginnings",
+                        spiritualChallengePrompt: "What 'old' habit or mindset can you leave behind today to embrace the 'new'?"
+                    },
+                    // Day 27
+                    {
+                        scripture: { text: "For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life.", reference: "John 3:16" },
+                        reminder: "God's love is boundless, offering eternal life.",
+                        spiritualChallengeTheme: "Divine Love",
+                        spiritualChallengePrompt: "How can you reflect God's boundless love to someone else today?"
+                    },
+                    // Day 28
+                    {
+                        scripture: { text: "The joy of the Lord is your strength.", reference: "Nehemiah 8:10" },
+                        reminder: "Find your strength not in circumstances, but in the joy of the Lord.",
+                        spiritualChallengeTheme: "Joy as Strength",
+                        spiritualChallengePrompt: "How can you tap into the joy of the Lord to find strength for today's tasks?"
+                    },
+                    // Day 29
+                    {
+                        scripture: { text: "And surely I am with you always, to the very end of the age.", reference: "Matthew 28:20" },
+                        reminder: "You are never alone; God's presence is constant.",
+                        spiritualChallengeTheme: "Constant Presence",
+                        spiritualChallengePrompt: "How can you be more aware of God's constant presence with you today?"
+                    },
+                    // Day 30
+                    {
+                        scripture: { text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters.", reference: "Colossians 3:23" },
+                        reminder: "Every task, big or small, can be an act of worship.",
+                        spiritualChallengeTheme: "Work & Purpose",
+                        spiritualChallengePrompt: "How can you approach your work or daily tasks with a renewed sense of purpose for God's glory?"
                     }
-                }
+                ],
+                weeklyPrayerSuggestions: [
+                    // Week 1
+                    "Heavenly Father, as I begin this week, I pray for Your wisdom to guide my decisions and Your strength to carry out my tasks. Help me to trust in Your perfect plan, even when the path is unclear. May Your presence be my constant companion. Amen.",
+                    // Week 2
+                    "Lord, I come before You this week seeking Your peace amidst any anxieties. Be my light and my stronghold. Grant me courage to face challenges and the grace to rest in Your unfailing love. May Your comfort fill my heart. Amen.",
+                    // Week 3
+                    "Gracious God, I pray for renewed strength and fresh perspective as I move through this week. Help me to hope in You, knowing that You will lift me up and enable me to overcome weariness. Grant me the patience to wait on Your timing and to see Your hand in all things. Amen.",
+                    // Week 4
+                    "Merciful Father, this week I seek Your forgiveness and renewal. Cleanse my heart and renew a steadfast spirit within me. Help me to walk in integrity, to extend compassion to others, and to reflect Your boundless love in all I do. Amen."
+                ]
             },
             "fr": {
                 mainTitle: "🌅 Réflexion Matinale",
-                reminderPrefix: "", /* Removed "Rappel :" */
+                reminderPrefix: "",
                 scriptureTitle: "Écriture du Jour",
                 verseReflectionTitle: "Que signifie ce verset pour moi aujourd'sui ?",
                 verseReflectionPlaceholder: "Écrivez vos pensées ici",
                 personalPrayerTitle: "Prière Personnelle",
                 personalPrayerSubtitle: "Parlez à Dieu de vos espoirs et de vos besoins aujourd'hui. Voici une suggestion pour vous inspirer :",
-                spiritualChallengeTitle: "Défi Spirituel du Jour :",
                 gratitudeTitle: "Invite à la Gratitude",
                 gratitudeSubtitle: "Aujourd'hui, je suis reconnaissant(e) pour...",
                 emojiInstructions: "Choisissez jusqu'à 4 émojis qui représentent votre gratitude aujourd'hui :",
@@ -510,78 +658,228 @@
                 clearCanvasButtonText: "Effacer le Canevas",
                 presetIconsTitle: "Icônes Prédéfinies :",
                 pasteImageInfo: "(Note : Le collage d'images directement depuis le presse-papiers n'est pas pris en charge dans cette version simple. Cliquez sur une icône, puis sur le canevas pour l'estampiller.)",
-                daily: {
-                    "Monday": {
-                        scripture: {
-                            text: "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse; reconnais-le dans toutes tes voies, et il aplanira tes sentiers.",
-                            reference: "Proverbes 3:5-6"
-                        },
-                        prayerSuggestion: "Père Céleste, en ce lundi, je viens devant Toi cherchant force et direction. Aide-moi à me confier entièrement en Ta sagesse, même lorsque je ne comprends pas Ton plan. Guide mes pas aujourd'hui et rends mes chemins droits selon Ta volonté. Amen.",
-                        reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
+                dailyContent: [
+                    // Jour 1
+                    {
+                        scripture: { text: "Confie-toi en l'Éternel de tout ton cœur, et ne t'appuie pas sur ta sagesse; reconnais-le dans toutes tes voies, et il aplanira tes sentiers.", reference: "Proverbes 3:5-6" },
+                        reminder: "Vous ne marchez pas seul. Dieu éclaire le chemin, même quand il tourne.",
                         spiritualChallengeTheme: "Force et Direction",
                         spiritualChallengePrompt: "Considérez un domaine spécifique où vous avez tendance à vous fier à votre propre compréhension. Comment pouvez-vous intentionnellement abandonner cela à Dieu aujourd'hui ?"
                     },
-                    "Tuesday": {
-                        scripture: {
-                            text: "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? L'Éternel est le soutien de ma vie : de qui aurais-je peur ?",
-                            reference: "Psalm 27:1"
-                        },
-                        prayerSuggestion: "Seigneur, aujourd'hui je cherche Ta paix et Ton réconfort. Sois ma lumière dans toute obscurité et mon salut contre toute peur. Je Te déclare comme la forteresse de ma vie. Aide-moi à marcher avec courage et à trouver le repos en Ta présence. Amen.",
-                        reminder: "Attendre n'est pas perdre son temps, c'est se préparer.",
+                    // Jour 2
+                    {
+                        scripture: { text: "L'Éternel est ma lumière et mon salut : de qui aurais-je crainte ? L'Éternel est le soutien de ma vie : de qui aurais-je peur ?", reference: "Psaume 27:1" },
+                        reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
                         spiritualChallengeTheme: "Paix et Réconfort",
                         spiritualChallengePrompt: "Identifiez une situation qui vous cause de l'anxiété. Comment pouvez-vous y inviter la paix de Dieu ?"
                     },
-                    "Wednesday": {
-                        scripture: {
-                            text: "Mais ceux qui s'attendent à l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles; ils courent et ne se lassent point, ils marchent et ne se fatiguent point.",
-                            reference: "Ésaïe 40:31"
-                        },
-                        prayerSuggestion: "Dieu bienveillant, alors que j'affronte ce mercredi, je prie pour une force renouvelée et une nouvelle perspective. Aide-moi à espérer en Toi, sachant que Tu me relèveras et me permettras de surmonter la fatigue. Accorde-moi la patience d'attendre Ton timing. Amen.",
-                        reminder: "Le renouveau commence par le lâcher-prise.",
+                    // Jour 3
+                    {
+                        scripture: { text: "Mais ceux qui s'attendent à l'Éternel renouvellent leur force. Ils prennent le vol comme les aigles; ils courent et ne se lassent point, ils marchent et ne se fatiguent point.", reference: "Ésaïe 40:31" },
+                        reminder: "Attendre n'est pas perdre son temps, c'est se préparer.",
                         spiritualChallengeTheme: "Patience et Perspective",
                         spiritualChallengePrompt: "Quel est un domaine où vous devez lâcher prise et faire confiance au timing de Dieu ?"
                     },
-                    "Thursday": {
-                        scripture: {
-                            text: "Ô Dieu ! crée en moi un cœur pur, et renouvelle en moi un esprit bien disposé.",
-                            reference: "Psaume 51:10"
-                        },
-                        prayerSuggestion: "Père miséricordieux, en ce jeudi, je viens chercher Ton pardon et Ton renouveau. Purifie mon cœur et renouvelle un esprit ferme en moi. Aide-moi à marcher avec intégrité et à refléter Ta pureté in all I do. Amen.",
-                        reminder: "Chaque acte de compassion est un reflet de l'amour de Dieu.",
+                    // Jour 4
+                    {
+                        scripture: { text: "Ô Dieu ! crée en moi un cœur pur, et renouvelle en moi un esprit bien disposé.", reference: "Psaume 51:10" },
+                        reminder: "Le renouveau commence par le lâcher-prise.",
                         spiritualChallengeTheme: "Pardon et Renouveau",
                         spiritualChallengePrompt: "Y a-t-il quelqu'un que vous devez pardonner, ou un domaine où vous avez besoin du pardon et du renouveau de Dieu ?"
                     },
-                    "Friday": {
-                        scripture: {
-                            text: "Soyez bons les uns envers les autres, compatissants, vous pardonnant réciproquement, comme Dieu vous a pardonné en Christ.",
-                            reference: "Éphésiens 4:32"
-                        },
-                        prayerSuggestion: "Loving God, as the week draws to a close, fill my heart with Your love and compassion. Help me to be kind and understanding towards others, extending forgiveness as You have so freely given it to me. May my actions reflect Your boundless love. Amen.",
-                        reminder: "Every act of compassion is a reflection of God’s love.",
-                        spiritualChallengeTheme: "Love & Compassion",
-                        spiritualChallengePrompt: "How can you show intentional kindness or compassion to someone today?"
+                    // Jour 5
+                    {
+                        scripture: { text: "Soyez bons les uns envers les autres, compatissants, vous pardonnant réciproquement, comme Dieu vous a pardonné en Christ.", reference: "Éphésiens 4:32" },
+                        reminder: "Chaque acte de compassion est un reflet de l'amour de Dieu.",
+                        spiritualChallengeTheme: "Amour et Compassion",
+                        spiritualChallengePrompt: "Comment pouvez-vous faire preuve de gentillesse ou de compassion intentionnelle envers quelqu'un aujourd'hui ?"
                     },
-                    "Saturday": {
-                        scripture: {
-                            text: "Come to me, all you who are weary and burdened, and I will give you rest.",
-                            reference: "Matthew 11:28"
-                        },
-                        prayerSuggestion: "Resting Father, on this Saturday, I lay my weariness and burdens before You. I come seeking the rest only You can provide. Help me to surrender my worries and trust in Your unfailing care. Refresh my soul and spirit. Amen.",
-                        reminder: "Let go. Breathe. Rest. God is still working while you sleep.",
-                        spiritualChallengeTheme: "Rest & Surrender",
-                        spiritualChallengePrompt: "What burden can you intentionally surrender to God today to find rest?"
+                    // Jour 6
+                    {
+                        scripture: { text: "Venez à moi, vous tous qui êtes fatigués et chargés, et je vous donnerai du repos.", reference: "Matthieu 11:28" },
+                        reminder: "Lâchez prise. Respirez. Reposez-vous. Dieu travaille toujours pendant que vous dormez.",
+                        spiritualChallengeTheme: "Repos et Abandon",
+                        spiritualChallengePrompt: "Quel fardeau pouvez-vous intentionnellement abandonner à Dieu aujourd'hui pour trouver le repos ?"
                     },
-                    "Sunday": {
-                        scripture: {
-                            text: "This is the day that the Lord has made; let us rejoice and be glad in it.",
-                            reference: "Psalm 118:24"
-                        },
-                        prayerSuggestion: "Joyful Lord, on this blessed Sunday, I rejoice in the day You have made. Fill my heart with gladness and my spirit with worship. Help me to celebrate Your goodness and to share Your joy with those around me. Amen.",
-                        reminder: "La paix n'est pas l'absence de peur, c'est la présence de Dieu.",
+                    // Jour 7
+                    {
+                        scripture: { text: "C'est ici la journée que l'Éternel a faite : Qu'elle soit pour nous un sujet d'allégresse et de joie !", reference: "Psaume 118:24" },
+                        reminder: "La joie n'est pas seulement une émotion; c'est un choix spirituel.",
                         spiritualChallengeTheme: "Joie et Adoration",
-                        spiritualChallengePrompt: "How can you intentionally cultivate joy and express worship today?"
+                        spiritualChallengePrompt: "Comment pouvez-vous intentionnellement cultiver la joie et exprimer l'adoration aujourd'hui ?"
+                    },
+                    // Jour 8
+                    {
+                        scripture: { text: "Je puis tout par celui qui me fortifie.", reference: "Philippiens 4:13" },
+                        reminder: "Votre force vient de Lui. Appuyez-vous sur elle.",
+                        spiritualChallengeTheme: "Force Intérieure",
+                        spiritualChallengePrompt: "Où vous sentez-vous faible aujourd'hui ? Comment pouvez-vous inviter la force du Christ dans ce domaine ?"
+                    },
+                    // Jour 9
+                    {
+                        scripture: { text: "Car je connais les projets que j'ai formés sur vous, dit l'Éternel, projets de paix et non de malheur, afin de vous donner un avenir et de l'espérance.", reference: "Jérémie 29:11" },
+                        reminder: "Les plans de Dieu pour vous sont bons, même lorsque le chemin n'est pas clair.",
+                        spiritualChallengeTheme: "Espoir et Avenir",
+                        spiritualChallengePrompt: "À quel espoir futur vous accrochez-vous ? Comment ce verset vous encourage-t-il ?"
+                    },
+                    // Jour 10
+                    {
+                        scripture: { text: "Les bontés de l'Éternel ne sont pas épuisées, ses compassions ne sont pas à leur terme; elles se renouvellent chaque matin. Grande est ta fidélité !", reference: "Lamentations 3:22-23" },
+                        reminder: "Chaque nouveau jour apporte de nouvelles miséricordes. Accueillez-les.",
+                        spiritualChallengeTheme: "Miséricorde et Fidélité",
+                        spiritualChallengePrompt: "Quelle nouvelle miséricorde pouvez-vous reconnaître et pour laquelle vous pouvez être reconnaissant ce matin ?"
+                    },
+                    // Jour 11
+                    {
+                        scripture: { text: "Arrêtez, et sachez que je suis Dieu : Je domine sur les nations, je domine sur la terre.", reference: "Psaume 46:10" },
+                        reminder: "Dans le calme, vous trouvez la présence et la puissance de Dieu.",
+                        spiritualChallengeTheme: "Calme et Présence",
+                        spiritualChallengePrompt: "Comment pouvez-vous créer un moment de calme aujourd'hui pour vous connecter à Dieu ?"
+                    },
+                    // Jour 12
+                    {
+                        scripture: { text: "Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d'eux.", reference: "Matthieu 18:20" },
+                        reminder: "Dieu est avec vous, surtout lorsque vous vous rassemblez en Son nom.",
+                        spiritualChallengeTheme: "Communauté et Présence",
+                        spiritualChallengePrompt: "Comment pouvez-vous favoriser un sentiment de la présence de Dieu dans vos interactions avec les autres aujourd'hui ?"
+                    },
+                    // Jour 13
+                    {
+                        scripture: { text: "Que l'Éternel te bénisse et te garde ! Que l'Éternel fasse luire sa face sur toi et t'accorde sa grâce ! Que l'Éternel tourne sa face vers toi et te donne la paix !", reference: "Nombres 6:24-26" },
+                        reminder: "Vous êtes béni, gardé et gracié par l'Éternel.",
+                        spiritualChallengeTheme: "Bénédiction et Paix",
+                        spiritualChallengePrompt: "Réfléchissez à une bénédiction que vous avez reçue. Comment pouvez-vous partager cette paix avec quelqu'un d'autre ?"
+                    },
+                    // Jour 14
+                    {
+                        scripture: { text: "Cherchez premièrement le royaume et la justice de Dieu; et toutes ces choses vous seront données par-dessus.", reference: "Matthieu 6:33" },
+                        reminder: "Priorisez Dieu, et tout le reste se mettra en place.",
+                        spiritualChallengeTheme: "Priorités et Provision",
+                        spiritualChallengePrompt: "Quelle est la chose que vous pouvez prioriser aujourd'hui pour chercher d'abord le royaume de Dieu ?"
+                    },
+                    // Jour 15
+                    {
+                        scripture: { text: "Je vous donne un commandement nouveau: Aimez-vous les uns les autres; comme je vous ai aimés, vous aussi, aimez-vous les uns les autres.", reference: "Jean 13:34" },
+                        reminder: "L'amour est une action, un choix quotidien.",
+                        spiritualChallengeTheme: "Amour en Action",
+                        spiritualChallengePrompt: "Comment pouvez-vous activement démontrer de l'amour à quelqu'un dans votre vie aujourd'hui ?"
+                    },
+                    // Jour 16
+                    {
+                        scripture: { text: "Soyez joyeux dans l'espérance, patients dans l'affliction, persévérants dans la prière.", reference: "Romains 12:12" },
+                        reminder: "L'espérance alimente la joie, la patience renforce la détermination, la prière vous connecte à la puissance.",
+                        spiritualChallengeTheme: "Joie, Patience, Prière",
+                        spiritualChallengePrompt: "Lequel de ces trois domaines (espérance, patience, prière) a besoin de votre attention aujourd'hui ?"
+                    },
+                    // Jour 17
+                    {
+                        scripture: { text: "Car ce n'est pas un esprit de timidité que Dieu nous a donné, mais un esprit de force, d'amour et de sagesse.", reference: "2 Timothée 1:7" },
+                        reminder: "Vous êtes équipé de puissance, d'amour et d'un esprit sain.",
+                        spiritualChallengeTheme: "Courage et Clarté",
+                        spiritualChallengePrompt: "Où devez-vous agir avec puissance, amour ou un esprit sain aujourd'hui ?"
+                    },
+                    // Jour 18
+                    {
+                        scripture: { text: "L'Éternel est bon, il est un refuge au jour de la détresse; il connaît ceux qui se confient en lui.", reference: "Nahum 1:7" },
+                        reminder: "Dans les moments difficiles, Dieu est votre refuge sûr.",
+                        spiritualChallengeTheme: "Refuge et Sécurité",
+                        spiritualChallengePrompt: "Quels problèmes rencontrez-vous ? Comment pouvez-vous trouver refuge en Dieu aujourd'hui ?"
+                    },
+                    // Jour 19
+                    {
+                        scripture: { text: "Je vous ai dit ces choses, afin que vous ayez la paix en moi. Dans le monde, vous aurez des tribulations. Mais prenez courage, j'ai vaincu le monde.", reference: "Jean 16:33" },
+                        reminder: "Les troubles sont inévitables, mais la paix est possible par le Christ.",
+                        spiritualChallengeTheme: "Vaincre le Trouble",
+                        spiritualChallengePrompt: "Quel défi vous semble insurmontable ? Comment pouvez-vous trouver la paix dans la victoire du Christ ?"
+                    },
+                    // Jour 20
+                    {
+                        scripture: { text: "Nous savons, du reste, que toutes choses concourent au bien de ceux qui aiment Dieu, de ceux qui sont appelés selon son dessein.", reference: "Romains 8:28" },
+                        reminder: "Même dans des circonstances difficiles, Dieu œuvre pour votre bien.",
+                        spiritualChallengeTheme: "But et Bonté",
+                        spiritualChallengePrompt: "Comment pouvez-vous voir le dessein de Dieu se dérouler même dans des situations inattendues aujourd'hui ?"
+                    },
+                    // Jour 21
+                    {
+                        scripture: { text: "Mais le fruit de l'Esprit, c'est l'amour, la joie, la paix, la patience, la bonté, la bienveillance, la fidélité, la douceur, la maîtrise de soi.", reference: "Galates 5:22-23" },
+                        reminder: "Cultivez ces fruits, et votre vie fleurira.",
+                        spiritualChallengeTheme: "Fruit Spirituel",
+                        spiritualChallengePrompt: "Quel fruit de l'Esprit voulez-vous intentionnellement cultiver aujourd'hui ?"
+                    },
+                    // Jour 22
+                    {
+                        scripture: { text: "Ne vous inquiétez de rien; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces.", reference: "Philippiens 4:6" },
+                        reminder: "Échangez votre anxiété contre la prière et l'action de grâce.",
+                        spiritualChallengeTheme: "Anxiété et Prière",
+                        spiritualChallengePrompt: "Quelle anxiété pouvez-vous transformer en prière d'action de grâce aujourd'hui ?"
+                    },
+                    // Jour 23
+                    {
+                        scripture: { text: "Car c'est par la grâce que vous êtes sauvés, par le moyen de la foi. Et cela ne vient pas de vous, c'est le don de Dieu.", reference: "Éphésiens 2:8" },
+                        reminder: "Le salut est un don, donné gratuitement par grâce.",
+                        spiritualChallengeTheme: "Grâce et Foi",
+                        spiritualChallengePrompt: "Comment pouvez-vous vivre votre gratitude pour la grâce de Dieu aujourd'hui ?"
+                    },
+                    // Jour 24
+                    {
+                        scripture: { text: "Je te loue de ce que je suis une créature si merveilleuse. Tes œuvres sont admirables, et mon âme le reconnaît bien.", reference: "Psaume 139:14" },
+                        reminder: "Vous êtes un chef-d'œuvre, merveilleusement créé par Dieu.",
+                        spiritualChallengeTheme: "Estime de Soi et Création",
+                        spiritualChallengePrompt: "Comment pouvez-vous affirmer votre valeur unique en tant que création de Dieu aujourd'hui ?"
+                    },
+                    // Jour 25
+                    {
+                        scripture: { text: "L'Éternel est mon berger : je ne manquerai de rien.", reference: "Psaume 23:1" },
+                        reminder: "Avec Dieu comme votre berger, tous vos besoins sont satisfaits.",
+                        spiritualChallengeTheme: "Provision et Contentement",
+                        spiritualChallengePrompt: "Quel besoin pouvez-vous confier à Dieu aujourd'hui pour qu'il le satisfasse ?"
+                    },
+                    // Jour 26
+                    {
+                        scripture: { text: "Si quelqu'un est en Christ, il est une nouvelle créature. Les choses anciennes sont passées; voici, toutes choses sont devenues nouvelles.", reference: "2 Corinthiens 5:17" },
+                        reminder: "Accueillez la nouveauté que le Christ vous offre chaque jour.",
+                        spiritualChallengeTheme: "Nouveaux Départs",
+                        spiritualChallengePrompt: "Quelle 'ancienne' habitude ou mentalité pouvez-vous laisser derrière vous aujourd'hui pour embrasser le 'nouveau' ?"
+                    },
+                    // Jour 27
+                    {
+                        scripture: { text: "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle.", reference: "Jean 3:16" },
+                        reminder: "L'amour de Dieu est illimité, offrant la vie éternelle.",
+                        spiritualChallengeTheme: "Amour Divin",
+                        spiritualChallengePrompt: "Comment pouvez-vous refléter l'amour illimité de Dieu à quelqu'un d'autre aujourd'hui ?"
+                    },
+                    // Jour 28
+                    {
+                        scripture: { text: "La joie de l'Éternel est votre force.", reference: "Néhémie 8:10" },
+                        reminder: "Trouvez votre force non pas dans les circonstances, mais dans la joie de l'Éternel.",
+                        spiritualChallengeTheme: "Joie comme Force",
+                        spiritualChallengePrompt: "Comment pouvez-vous puiser dans la joie de l'Éternel pour trouver la force pour les tâches d'aujourd'hui ?"
+                    },
+                    // Jour 29
+                    {
+                        scripture: { text: "Et voici, je suis avec vous tous les jours, jusqu'à la fin du monde.", reference: "Matthieu 28:20" },
+                        reminder: "Vous n'êtes jamais seul ; la présence de Dieu est constante.",
+                        spiritualChallengeTheme: "Présence Constante",
+                        spiritualChallengePrompt: "Comment pouvez-vous être plus conscient de la présence constante de Dieu avec vous aujourd'hui ?"
+                    },
+                    // Jour 30
+                    {
+                        scripture: { text: "Tout ce que vous faites, faites-le de bon cœur, comme pour le Seigneur et non pour des hommes.", reference: "Colossiens 3:23" },
+                        reminder: "Chaque tâche, grande ou petite, peut être un acte d'adoration.",
+                        spiritualChallengeTheme: "Travail et But",
+                        spiritualChallengePrompt: "Comment pouvez-vous aborder votre travail ou vos tâches quotidiennes avec un sens renouvelé du but pour la gloire de Dieu ?"
                     }
-                }
+                ],
+                weeklyPrayerSuggestions: [
+                    // Semaine 1
+                    "Père Céleste, en ce début de semaine, je prie pour que Ta sagesse guide mes décisions et Ta force m'aide à accomplir mes tâches. Aide-moi à me confier en Ton plan parfait, même lorsque le chemin n'est pas clair. Que Ta présence soit ma constante compagnie. Amen.",
+                    // Semaine 2
+                    "Seigneur, je viens devant Toi cette semaine cherchant Ta paix au milieu de toutes les anxiétés. Sois ma lumière et ma forteresse. Accorde-moi le courage d'affronter les défis et la grâce de me reposer dans Ton amour infaillible. Que Ton réconfort remplisse mon cœur. Amen.",
+                    // Semaine 3
+                    "Dieu bienveillant, je prie pour une force renouvelée et une nouvelle perspective alors que j'avance dans cette semaine. Aide-moi à espérer en Toi, sachant que Tu me relèveras et me permettras de surmonter la fatigue. Accorde-moi la patience d'attendre Ton timing et de voir Ta main en toutes choses. Amen.",
+                    // Semaine 4
+                    "Père miséricordieux, cette semaine, je cherche Ton pardon et Ton renouveau. Purifie mon cœur et renouvelle un esprit ferme en moi. Aide-moi à marcher avec intégrité, à faire preuve de compassion envers les autres et à refléter Ton amour illimité dans tout ce que je fais. Amen."
+                ]
             }
         };
 
@@ -1043,10 +1341,14 @@
          * @param {string} lang - The language code ('en' or 'fr').
          */
         const updateContent = (lang) => {
-            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-            const dayName = days[currentDate.getDay()];
-            // Get daily content for the current day, defaulting to Monday if not found
-            const dailyData = content[lang].daily[dayName] || content[lang].daily["Monday"];
+            // Calculate day index (0-29)
+            const dayIndex = (currentDate.getDate() - 1) % content[lang].dailyContent.length;
+            const dailyData = content[lang].dailyContent[dayIndex];
+
+            // Calculate week index (0-3) for weekly prayers
+            const weekIndex = Math.floor((currentDate.getDate() - 1) / 7) % content[lang].weeklyPrayerSuggestions.length;
+            const weeklyPrayer = content[lang].weeklyPrayerSuggestions[weekIndex];
+
 
             // Update static elements based on language
             document.getElementById('main-title').textContent = content[lang].mainTitle;
@@ -1081,7 +1383,8 @@
             document.getElementById('daily-reminder').textContent = dailyData.reminder;
             document.getElementById('scripture-text').textContent = dailyData.scripture.text;
             document.getElementById('scripture-reference').textContent = dailyData.scripture.reference;
-            document.getElementById('prayer-textarea').placeholder = dailyData.prayerSuggestion;
+            document.getElementById('prayer-textarea').placeholder = weeklyPrayer; // Use weekly prayer
+
 
             const spiritualChallengeFullTitleElement = document.getElementById('spiritual-challenge-full-title');
             if (spiritualChallengeFullTitleElement) {
@@ -1172,4 +1475,3 @@
     </script>
 </body>
 </html>
-�

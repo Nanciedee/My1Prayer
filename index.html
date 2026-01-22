@@ -4,36 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Réflexion Matinale</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Delius&family=Lato:wght@400;700&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Delius&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* 1. LE FOND CRÈME */
-        body { 
-            background-color: #FFF5E1 !important; 
-            font-family: 'Lato', sans-serif;
-            color: #4A4A4A;
-        }
-
-        /* 2. L'EFFET DE VERRE (GLASS) */
-        .glass-effect { 
-            background: rgba(255, 255, 255, 0.4) !important; 
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.6);
-            border-radius: 2rem;
-        }
-
-        /* 3. L'INDIGO POUR LES TITRES */
-        h1, h2, h3, .serif { 
-            color: #1e1b4b !important; 
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* LE STYLE MANUSCRIT */
-        .handwritten { font-family: 'Great Vibes', cursive; color: #b45309; }
-        .scripture { font-family: 'Delius', cursive; }
+        body { background-color: #FFF5E1; font-family: 'Lato', sans-serif; color: #4A4A4A; min-height: 100vh; padding: 20px; }
+        .glass-effect { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); border-radius: 2.5rem; }
+        .serif { font-family: 'Playfair Display', serif; color: #1e1b4b; }
+        .handwritten { font-family: 'Great Vibes', cursive; color: #b45309; font-size: 3.5rem; }
+        .scripture { font-family: 'Delius', cursive; background: #fdfaf0; border: 1px solid #faedcd; border-radius: 1.5rem; padding: 1.5rem; }
+        canvas { background: white; border: 2px dashed #d1d5db; border-radius: 1.5rem; cursor: crosshair; touch-action: none; }
     </style>
 </head>
+<body>
+
+    <div class="max-w-4xl mx-auto glass-effect p-8 md:p-12 shadow-2xl">
+        <div class="text-center mb-10">
+            <h1 class="handwritten">Réflexion Matinale</h1>
+            <p class="serif uppercase tracking-widest text-sm font-bold">Mon Temps avec Dieu</p>
+        </div>
+
+        <div class="scripture mb-8 text-center">
+            <p class="text-lg italic text-gray-700">"Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces."</p>
+            <p class="text-right text-indigo-900 font-bold mt-2 text-xs uppercase">Philippiens 4:6</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="space-y-2">
+                <label class="serif font-bold flex items-center gap-2"><i data-lucide="message-circle" size="18"></i> Ma Prière</label>
+                <textarea class="w-full h-40 p-4 rounded-2xl bg-white/50 border-none focus:ring-2 focus:ring-indigo-200" placeholder="Seigneur..."></textarea>
+            </div>
+            <div class="space-y-2">
+                <label class="serif font-bold flex items-center gap-2"><i data-lucide="heart" size="18"></i> Gratitude</label>
+                <textarea class="w-full h-40 p-4 rounded-2xl bg-white/50 border-none focus:ring-2 focus:ring-indigo-200 italic" placeholder="Merci pour..."></textarea>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <div class="flex justify-between items-center">
+                <label class="serif font-bold flex items-center gap-2"><i data-lucide="palette" size="18"></i> Espace Visuel</label>
+                <button onclick="ctx.clearRect(0,0,canvas.width,canvas.height)" class="text-xs text-red-500 font-bold uppercase">Effacer</button>
+            </div>
+            <canvas id="draw" class="w-full h-64 shadow-inner"></canvas>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const canvas = document.getElementById('draw');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function init() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.strokeStyle = '#4f46e5';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+        }
+
+        canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); };
+        canvas.onmousemove = (e) => { if(drawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
+        window.onmouseup = () => drawing = false;
+        
+        window.onload = init;
+        window.onresize = init;
+    </script>
+</body>
+</html>

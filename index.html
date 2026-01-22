@@ -11,7 +11,195 @@
         body { background-color: #FFF5E1; font-family: 'Lato', sans-serif; color: #4A4A4A; min-height: 100vh; padding: 1rem; }
         .glass { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); border-radius: 2.5rem; }
         .paper { background-color: #fdfaf0; border: 1px solid #faedcd; border-radius: 1.5rem; }
+    <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Réflexion Matinale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Delius&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #FFF5E1; font-family: 'Lato', sans-serif; color: #4A4A4A; min-height: 100vh; padding: 1rem; }
+        .glass { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); border-radius: 2.5rem; }
+        .paper { background-color: #fdfaf0; border: 1px solid #faedcd; border-radius: 1.5rem; }
         .serif { font-family: 'Playfair Display', serif; color: #1e1b4b; }
+        .handwritten { font-family: 'Great Vibes', cursive; color: #b45309; font-size: 3.5rem; }
+        .scripture { font-family: 'Delius', cursive; }
+        canvas { background: white; border: 2px dashed #cbd5e1; border-radius: 1.5rem; cursor: crosshair; touch-action: none; }
+        .mood-btn { font-size: 3rem; transition: transform 0.2s; cursor: pointer; opacity: 0.6; }
+        .mood-btn:hover { transform: scale(1.2); opacity: 1; }
+        .active-mood { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4)); }
+        .history-card { background: rgba(255,255,255,0.5); border-radius: 1rem; padding: 10px; text-align: center; border: 1px solid white; }
+    </style>
+</head>
+<body class="flex flex-col items-center">
+
+    <div class="max-w-5xl w-full glass p-6 md:p-12 shadow-2xl my-6">
+        
+        <div class="text-center mb-10">
+            <h1 class="handwritten">Réflexion Matinale</h1>
+            <p class="serif uppercase tracking-widest text-xs font-bold">Mon Suivi de Paix Intérieure</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                <div class="paper p-6 text-center shadow-sm border-l-4 border-amber-400">
+                    <h3 class="serif font-bold uppercase text-xs mb-3 flex justify-center gap-2"><i data-lucide="quote" size="18"></i> Verset</h3>
+                    <p class="scripture text-lg italic text-gray-700">"Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu..."</p>
+                    <p class="text-right text-xs mt-2 font-bold text-amber-700 italic">Phil 4:6</p>
+                </div>
+
+                <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50">
+                    <h3 class="serif font-bold uppercase text-xs mb-3 flex gap-2"><i data-lucide="pen-tool" size="18"></i> Ma Prière</h3>
+                    <textarea id="prayerText" oninput="saveData()" class="w-full h-44 bg-transparent border-none focus:ring-0 text-gray-700 scripture text-lg" placeholder="Seigneur..."></textarea>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50 text-center">
+                    <h3 class="serif font-bold uppercase text-xs mb-4">Comment est mon cœur aujourd'hui ?</h3>
+                    <div class="flex justify-around mb-6">
+                        <span onclick="setMood('🤩', this)" class="mood-btn">🤩</span>
+                        <span onclick="setMood('✨', this)" class="mood-btn">✨</span>
+                        <span onclick="setMood('💛', this)" class="mood-btn">💛</span>
+                        <span onclick="setMood('😄', this)" class="mood-btn">😄</span>
+                        <span onclick="setMood('😔', this)" class="mood-btn">😔</span>
+                        <span onclick="setMood('😴', this)" class="mood-btn">😴</span>
+                    </div>
+                    
+                    <h4 class="serif font-bold uppercase text-[10px] mb-3 tracking-widest text-indigo-400">Progression de la semaine</h4>
+                    <div id="weeklyHistory" class="grid grid-cols-7 gap-2">
+                        </div>
+                </div>
+
+                <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50">
+                    <h3 class="serif font-bold uppercase text-xs mb-3 flex gap-2"><i data-lucide="heart" size="18"></i> Gratitude</h3>
+                    <textarea id="gratitudeText" oninput="saveData()" class="w-full h-28 bg-transparent border-none focus:ring-0 text-gray-700 italic scripture text-lg" placeholder="Merci pour..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="serif font-bold uppercase text-xs flex gap-2 items-center">
+                    <i data-lucide="palette" size="20"></i> Espace Visuel & Créatif
+                </h3>
+                <div class="flex gap-3 items-center">
+                    <label class="cursor-pointer bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-amber-200 hover:bg-amber-100">
+                        <i data-lucide="image" size="12" class="inline mr-1"></i> Ajouter Image
+                        <input type="file" id="imageLoader" class="hidden" accept="image/*">
+                    </label>
+                    
+                    <input type="color" id="color" class="w-8 h-8 rounded-full cursor-pointer bg-transparent border-none" value="#4f46e5">
+                    <button onclick="clearCanvas()" class="text-[10px] font-bold text-red-500 uppercase">Effacer tout</button>
+                </div>
+            </div>
+            <div class="relative w-full h-80">
+                <canvas id="canvas" class="w-full h-full shadow-inner z-10 relative"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const imageLoader = document.getElementById('imageLoader');
+        let drawing = false;
+
+        // Initialisation du canevas
+        function initCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.lineCap = 'round'; 
+            ctx.lineWidth = 3; 
+            ctx.strokeStyle = document.getElementById('color').value;
+        }
+
+        // --- GESTION DE L'IMAGE ---
+        imageLoader.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    // Calculer pour que l'image tienne dans le cadre sans déformation
+                    const ratio = Math.min(canvas.width / img.width, canvas.height / img.height);
+                    const centerShiftX = (canvas.width - img.width * ratio) / 2;
+                    const centerShiftY = (canvas.height - img.height * ratio) / 2;
+                    
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, img.width, img.height, centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        // --- LOGIQUE DESSIN ---
+        canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); };
+        canvas.onmousemove = (e) => { 
+            if(drawing) { 
+                ctx.strokeStyle = document.getElementById('color').value;
+                ctx.lineTo(e.offsetX, e.offsetY); 
+                ctx.stroke(); 
+            } 
+        };
+        window.onmouseup = () => drawing = false;
+
+        // Support Tactile (Doigt)
+        canvas.ontouchstart = (e) => { 
+            const t = e.touches[0]; const b = canvas.getBoundingClientRect(); 
+            drawing = true; ctx.beginPath(); ctx.moveTo(t.clientX - b.left, t.clientY - b.top); 
+        };
+        canvas.ontouchmove = (e) => { 
+            if(drawing) { 
+                const t = e.touches[0]; const b = canvas.getBoundingClientRect(); 
+                ctx.strokeStyle = document.getElementById('color').value;
+                ctx.lineTo(t.clientX - b.left, t.clientY - b.top); ctx.stroke(); 
+            } 
+        };
+
+        function clearCanvas() { ctx.clearRect(0,0,canvas.width,canvas.height); }
+
+        // --- RESTE DU CODE (LOGIQUE DE SAUVEGARDE) ---
+        let journalData = JSON.parse(localStorage.getItem('my1prayer_data')) || {};
+        const today = new Date().toISOString().split('T')[0];
+
+        function saveData() {
+            if(!journalData[today]) journalData[today] = {};
+            journalData[today].prayer = document.getElementById('prayerText').value;
+            journalData[today].gratitude = document.getElementById('gratitudeText').value;
+            localStorage.setItem('my1prayer_data', JSON.stringify(journalData));
+        }
+
+        function setMood(mood, el) {
+            document.querySelectorAll('.mood-btn').forEach(m => m.classList.remove('active-mood'));
+            el.classList.add('active-mood');
+            if(!journalData[today]) journalData[today] = {};
+            journalData[today].mood = mood;
+            localStorage.setItem('my1prayer_data', JSON.stringify(journalData));
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const historyDiv = document.getElementById('weeklyHistory');
+            if(!historyDiv) return;
+            historyDiv.innerHTML = '';
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const dateKey = d.toISOString().split('T')[0];
+                const dayName = d.toLocaleDateString('fr-FR', { weekday: 'short' });
+                const savedMood = journalData[dateKey]?.mood || '•';
+                historyDiv.innerHTML += `<div class="p-2 border rounded-xl text-center ${dateKey === today ? 'bg-amber-100' : 'bg-white/50'}"><div class="text-[8px] uppercase font-bold">${dayName}</div><div>${savedMood}</div></div>`;
+            }
+        }
+
+        window.onload = () => { initCanvas(); updateHistory(); };
+    </script>
+</body>
+</html>    .serif { font-family: 'Playfair Display', serif; color: #1e1b4b; }
         .handwritten { font-family: 'Great Vibes', cursive; color: #b45309; font-size: 3.5rem; }
         .scripture { font-family: 'Delius', cursive; }
         canvas { background: white; border: 2px dashed #cbd5e1; border-radius: 1.5rem; cursor: crosshair; touch-action: none; }

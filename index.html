@@ -3,176 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réflexion Matinale - My1Prayer</title>
+    <title>Ma Réflexion Matinale</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400;700&family=Great+Vibes&family=Delius&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Delius&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root { --cream: #FFF5E1; --indigo-deep: #1e1b4b; --amber-soft: #b45309; }
-        body { font-family: 'Lato', sans-serif; background-color: var(--cream); color: #4A4A4A; min-height: 100vh; margin: 0; padding: 20px; }
-        
-        .serif { font-family: 'Playfair Display', serif; }
-        .handwritten { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: var(--amber-soft); }
-        .scripture-font { font-family: 'Delius', cursive; }
-        
-        /* Design du Journal 2026 */
-        .glass { 
-            background: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255,255,255,0.6); 
-            border-radius: 3rem; 
-        }
-        .paper-effect { 
-            background-color: #fdfaf0; 
-            border: 1px solid #faedcd; 
-            border-radius: 2rem; 
-        }
-        
-        /* Éléments aquarelle */
-        .watercolor { position: fixed; filter: blur(70px); opacity: 0.25; z-index: -1; border-radius: 50%; }
-
-        /* Dessin */
-        #drawingCanvas { 
-            background: white; 
-            border: 2px dashed #d1d5db; 
-            border-radius: 1.5rem; 
-            cursor: crosshair; 
-            touch-action: none; 
-        }
-        
-        .mood-btn { transition: all 0.3s; filter: grayscale(100%); opacity: 0.5; }
-        .mood-btn:hover, .mood-btn.active { filter: grayscale(0%); opacity: 1; transform: scale(1.2); }
+        body { background-color: #FFF5E1; font-family: 'Lato', sans-serif; color: #4A4A4A; min-height: 100vh; padding: 1rem; }
+        .glass { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); border-radius: 2.5rem; }
+        .paper { background-color: #fdfaf0; border: 1px solid #faedcd; border-radius: 1.5rem; }
+        .serif { font-family: 'Playfair Display', serif; color: #1e1b4b; }
+        .handwritten { font-family: 'Great Vibes', cursive; color: #b45309; font-size: 3.5rem; }
+        .scripture { font-family: 'Delius', cursive; }
+        canvas { background: white; border: 2px dashed #cbd5e1; border-radius: 1.5rem; cursor: crosshair; touch-action: none; }
+        .mood-btn { font-size: 3.5rem; transition: transform 0.2s; cursor: pointer; }
+        .mood-btn:hover { transform: scale(1.2); }
+        .active-mood { transform: scale(1.3); filter: drop-shadow(0 0 10px rgba(0,0,0,0.1)); }
     </style>
 </head>
-<body class="flex items-center justify-center">
+<body class="flex flex-col items-center">
 
-    <div class="watercolor w-96 h-96 bg-blue-300 -top-20 -right-20"></div>
-    <div class="watercolor w-80 h-80 bg-purple-300 bottom-10 -left-20"></div>
-
-    <div class="max-w-5xl w-full glass p-8 md:p-12 shadow-2xl my-10">
+    <div class="max-w-5xl w-full glass p-6 md:p-12 shadow-2xl my-6">
         
-        <div class="text-center mb-12">
+        <div class="text-center mb-10">
             <h1 class="handwritten">Réflexion Matinale</h1>
-            <p class="serif text-indigo-900 font-bold tracking-[0.3em] uppercase text-xs">Mon Espace Sacré My1Prayer</p>
+            <p class="serif uppercase tracking-widest text-xs font-bold">Mon Espace My1Prayer</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-10">
-            <div class="space-y-8">
-                <div class="p-8 paper-effect shadow-sm">
-                    <h3 class="font-bold text-indigo-900 flex items-center gap-2 mb-4 serif uppercase text-sm tracking-widest">
-                        <i data-lucide="book-open" size="18"></i> Verset du Jour
-                    </h3>
-                    <p class="scripture-font text-xl text-gray-700 italic text-center leading-relaxed">
-                        "Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces."
-                    </p>
-                    <p class="text-right text-xs mt-4 font-bold text-amber-700">Philippiens 4:6</p>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+                <div class="paper p-6 text-center shadow-sm">
+                    <h3 class="serif font-bold uppercase text-xs mb-3 flex justify-center gap-2"><i data-lucide="book-open" size="18"></i> Verset du Jour</h3>
+                    <p class="scripture text-lg italic text-gray-700">"Ne vous inquiétez de rien ; mais en toute chose faites connaître vos besoins à Dieu par des prières et des supplications, avec des actions de grâces."</p>
+                    <p class="text-right text-xs mt-2 font-bold text-amber-700 italic">Philippiens 4:6</p>
                 </div>
 
                 <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50">
-                    <h3 class="font-bold text-indigo-900 flex items-center gap-2 mb-3 serif uppercase text-sm tracking-widest">
-                        <i data-lucide="pen-tool" size="18"></i> Ma Prière
-                    </h3>
-                    <textarea class="w-full h-48 bg-transparent border-none focus:ring-0 text-gray-700 placeholder-indigo-300 scripture-font text-lg" placeholder="Seigneur, aujourd'hui je Te confie..."></textarea>
+                    <h3 class="serif font-bold uppercase text-xs mb-3 flex gap-2"><i data-lucide="pen-tool" size="18"></i> Ma Prière</h3>
+                    <textarea class="w-full h-44 bg-transparent border-none focus:ring-0 text-gray-700 scripture text-lg" placeholder="Seigneur..."></textarea>
                 </div>
             </div>
 
-            <div class="space-y-8">
+            <div class="space-y-6">
                 <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50 text-center">
-                    <h3 class="font-bold text-indigo-900 mb-6 serif uppercase text-sm tracking-widest">Comment est mon cœur ?</h3>
-                    <div class="flex justify-around text-4xl">
-                        <button onclick="selectMood(this)" class="mood-btn">🤩</button>
-                        <button onclick="selectMood(this)" class="mood-btn">✨</button>
-                        <button onclick="selectMood(this)" class="mood-btn">💛</button>
-                        <button onclick="selectMood(this)" class="mood-btn">😄</button>
-                        <button onclick="selectMood(this)" class="mood-btn">😔</button>
-                        <button onclick="selectMood(this)" class="mood-btn">😴</button>
+                    <h3 class="serif font-bold uppercase text-xs mb-6">Comment est mon cœur ?</h3>
+                    <div class="flex justify-around">
+                        <span onclick="selectMood(this)" class="mood-btn">🤩</span>
+                        <span onclick="selectMood(this)" class="mood-btn">✨</span>
+                        <span onclick="selectMood(this)" class="mood-btn">💛</span>
+                        <span onclick="selectMood(this)" class="mood-btn">😄</span>
+                        <span onclick="selectMood(this)" class="mood-btn">😔</span>
+                        <span onclick="selectMood(this)" class="mood-btn">😴</span>
                     </div>
                 </div>
 
                 <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50">
-                    <h3 class="font-bold text-indigo-900 mb-3 serif uppercase text-sm tracking-widest">💛 Gratitude</h3>
-                    <textarea class="w-full h-32 bg-transparent border-none focus:ring-0 text-gray-700 italic scripture-font text-lg" placeholder="Merci pour..."></textarea>
-                </div>
-
-                <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50">
-                    <h3 class="font-bold text-indigo-900 mb-3 serif uppercase text-sm tracking-widest">Ma pensée du jour</h3>
-                    <input type="text" class="w-full bg-transparent border-b border-indigo-100 focus:border-indigo-400 focus:ring-0 p-2 text-gray-700" placeholder="Une parole ou un mot clé...">
+                    <h3 class="serif font-bold uppercase text-xs mb-3 flex gap-2"><i data-lucide="heart" size="18"></i> Gratitude</h3>
+                    <textarea class="w-full h-28 bg-transparent border-none focus:ring-0 text-gray-700 italic scripture text-lg" placeholder="Merci pour..."></textarea>
                 </div>
             </div>
         </div>
 
-        <div class="mt-12 space-y-4">
-            <div class="flex justify-between items-center px-4">
-                <h3 class="font-bold text-indigo-900 flex items-center gap-2 serif uppercase text-sm tracking-widest">
-                    <i data-lucide="palette" size="18"></i> Espace Visuel & Croquis
-                </h3>
-                <div class="flex items-center gap-4">
-                    <input type="color" id="penColor" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white shadow-sm bg-transparent" value="#4f46e5">
-                    <button onclick="clearCanvas()" class="px-4 py-2 bg-red-50 text-red-600 rounded-full text-xs font-bold hover:bg-red-100 transition shadow-sm uppercase tracking-tighter">Effacer tout</button>
+        <div class="mt-10 space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="serif font-bold uppercase text-xs flex gap-2 items-center"><i data-lucide="palette" size="20"></i> Espace Visuel & Croquis</h3>
+                <div class="flex gap-4 items-center">
+                    <input type="color" id="color" class="w-8 h-8 rounded-full cursor-pointer bg-transparent border-none" value="#4f46e5">
+                    <button onclick="clearCanvas()" class="text-[10px] font-bold text-red-500 uppercase">Effacer</button>
                 </div>
             </div>
-            <canvas id="drawingCanvas" class="w-full h-80 shadow-inner"></canvas>
+            <canvas id="canvas" class="w-full h-64 shadow-inner"></canvas>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
-        
-        // Gestion du dessin
-        const canvas = document.getElementById('drawingCanvas');
+        const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let drawing = false;
 
-        function resizeCanvas() {
+        function init() {
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function getPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            return {
-                x: (e.clientX || e.touches[0].clientX) - rect.left,
-                y: (e.clientY || e.touches[0].clientY) - rect.top
-            };
-        }
-
-        function startDrawing(e) {
-            drawing = true;
-            const pos = getPos(e);
-            ctx.beginPath();
-            ctx.moveTo(pos.x, pos.y);
-        }
-
-        function draw(e) {
-            if (!drawing) return;
-            if (e.touches) e.preventDefault();
-            const pos = getPos(e);
-            ctx.lineWidth = 3;
             ctx.lineCap = 'round';
-            ctx.strokeStyle = document.getElementById('penColor').value;
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
+            ctx.lineWidth = 3;
         }
 
-        function stopDrawing() { drawing = false; }
+        canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); };
+        canvas.onmousemove = (e) => { if(drawing) { ctx.strokeStyle = document.getElementById('color').value; ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); } };
+        window.onmouseup = () => drawing = false;
 
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        window.addEventListener('mouseup', stopDrawing);
-        
-        canvas.addEventListener('touchstart', startDrawing);
-        canvas.addEventListener('touchmove', draw);
-        canvas.addEventListener('touchend', stopDrawing);
+        // Support Tactile
+        canvas.ontouchstart = (e) => { e.preventDefault(); const t = e.touches[0]; const b = canvas.getBoundingClientRect(); drawing = true; ctx.beginPath(); ctx.moveTo(t.clientX - b.left, t.clientY - b.top); };
+        canvas.ontouchmove = (e) => { if(drawing) { e.preventDefault(); const t = e.touches[0]; const b = canvas.getBoundingClientRect(); ctx.strokeStyle = document.getElementById('color').value; ctx.lineTo(t.clientX - b.left, t.clientY - b.top); ctx.stroke(); } };
+        canvas.ontouchend = () => drawing = false;
 
-        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
-
-        // Gestion de l'humeur
-        function selectMood(btn) {
-            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function clearCanvas() { ctx.clearRect(0,0,canvas.width,canvas.height); }
+        function selectMood(el) {
+            document.querySelectorAll('.mood-btn').forEach(m => m.classList.remove('active-mood'));
+            el.classList.add('active-mood');
         }
+
+        window.onload = init;
+        window.onresize = init;
     </script>
 </body>
 </html>

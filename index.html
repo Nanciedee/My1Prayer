@@ -3,952 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My1Prayer</title>
-    <link href="https://na01.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DPlayfair%2BDisplay%3Awght%40700%26family%3DGreat%2BVibes%26family%3DDelius%26family%3DLato%3Awght%40400%3B700%26display%3Dswap&data=05%7C02%7C%7C5d93dddae43a416c226908df118d40fe%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C639248970504639043%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=RpnSQb6qJbG4s3xIj3dnUk4UKKcEXiZxAu6JuHSq4LU%3D&reserved=0" rel="stylesheet">
+    <title>Réflexion Matinale Créative</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Great+Vibes&family=Delius&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-            --vert-sauge: #7A9A86;
-            --beige-lin: #F4F1EA;
-            --terracotta: #D98A72;
-            --anthracite: #2F3E46;
-            --blanc: #FFFFFF;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Lato', 'Segoe UI', sans-serif;
-            background: radial-gradient(ellipse at top left, #dce8e0, #E5E0D8 60%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* ==============================
-           LOGIN SCREEN
-        ============================== */
-        #login-screen {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, #eaf0ec 0%, #f4f1ea 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 2rem;
-            animation: fadeIn 0.5s ease;
-        }
-        #login-screen.hidden { display: none; }
-
-        .login-card {
-            background: white;
-            border-radius: 28px;
-            padding: 3rem 2.5rem;
-            max-width: 360px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 24px 64px rgba(0,0,0,0.08);
-        }
-        .login-logo {
-            font-family: 'Great Vibes', cursive;
-            font-size: 3.2rem;
-            color: var(--terracotta);
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-        .login-tagline {
-            font-size: 0.8rem;
-            color: var(--vert-sauge);
-            letter-spacing: 2px;
-            margin-bottom: 2rem;
-            font-weight: 700;
-        }
-        .login-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--anthracite);
-            margin-bottom: 0.75rem;
-            text-align: left;
-        }
-        .login-input {
-            width: 100%;
-            padding: 0.9rem 1rem;
-            border: 2px solid #d1e0d7;
-            border-radius: 12px;
-            font-size: 1.05rem;
-            outline: none;
-            color: var(--anthracite);
-            text-align: center;
-            transition: border-color 0.2s;
-            margin-bottom: 1.25rem;
-            font-family: 'Lato', sans-serif;
-        }
-        .login-input:focus { border-color: var(--vert-sauge); }
-        .login-input.error { border-color: var(--terracotta); }
-        .login-btn {
-            width: 100%;
-            padding: 0.9rem;
-            background: linear-gradient(135deg, var(--vert-sauge), #5a8070);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-family: 'Lato', sans-serif;
-        }
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 24px rgba(122,154,134,0.3);
-        }
-        .login-hint {
-            font-size: 0.72rem;
-            color: #aaa;
-            margin-top: 1.25rem;
-        }
-
-        /* ==============================
-           PHONE CONTAINER
-        ============================== */
-        .phone-container {
-            width: 375px;
-            height: 720px;
-            background: linear-gradient(180deg, #E8F0EC 0%, var(--beige-lin) 100%);
-            border-radius: 40px;
-            box-shadow: 0 24px 48px rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.04);
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            transition: background 0.5s;
-        }
-        .phone-container.dark-mode {
-            background: linear-gradient(180deg, #1F2937 0%, #111827 100%);
-            color: #F9FAFB;
-        }
-
-        /* ==============================
-           SCREENS
-        ============================== */
-        .screen {
-            display: none;
-            flex-direction: column;
-            height: calc(100% - 60px);
-            padding: 28px 22px 16px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-        .screen::-webkit-scrollbar { width: 3px; }
-        .screen::-webkit-scrollbar-thumb { background: rgba(122,154,134,0.25); border-radius: 2px; }
-        .screen.active { display: flex; animation: fadeIn 0.35s ease; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to   { opacity: 1; transform: none; }
-        }
-
-        /* ==============================
-           TYPOGRAPHY
-        ============================== */
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 21px;
-            color: var(--anthracite);
-            margin-bottom: 4px;
-        }
-        .dark-mode h1 { color: #A7F3D0; }
-        h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 17px;
-            color: var(--vert-sauge);
-            margin-bottom: 10px;
-        }
-        .subtitle { font-size: 12px; color: #6B7C75; margin-bottom: 18px; }
-        .dark-mode .subtitle { color: #9CA3AF; }
-        .handwritten { font-family: 'Great Vibes', cursive; }
-        .scripture   { font-family: 'Delius', cursive; }
-
-        /* ==============================
-           CARDS
-        ============================== */
-        .card-zen {
-            background: var(--blanc);
-            border-radius: 18px;
-            padding: 15px;
-            margin-bottom: 14px;
-            border-left: 5px solid var(--vert-sauge);
-            color: var(--anthracite);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-        }
-        .dark-mode .card-zen { background: #1F2937; border-left-color: #A7F3D0; }
-        .card-zen.accent { border-left-color: var(--terracotta); }
-
-        /* ==============================
-           FORMS
-        ============================== */
-        .input-group { margin-bottom: 13px; }
-        .input-group label {
-            display: block;
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            margin-bottom: 5px;
-            color: var(--vert-sauge);
-        }
-        .input-text, textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1.5px solid #d1e0d7;
-            border-radius: 10px;
-            font-size: 13px;
-            outline: none;
-            background: var(--blanc);
-            color: var(--anthracite);
-            transition: border-color 0.2s;
-            font-family: 'Lato', sans-serif;
-        }
-        .input-text:focus, textarea:focus { border-color: var(--vert-sauge); }
-        textarea { resize: none; }
-        .dark-mode .input-text, .dark-mode textarea {
-            background: #374151;
-            border-color: #4B5563;
-            color: white;
-        }
-
-        /* ==============================
-           BUTTONS
-        ============================== */
-        .btn-principal {
-            background: var(--vert-sauge);
-            color: var(--blanc);
-            border: none;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            font-size: 13px;
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-            font-family: 'Lato', sans-serif;
-        }
-        .btn-principal:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(122,154,134,0.28);
-        }
-        .btn-terracotta { background: var(--terracotta); }
-        .btn-terracotta:hover { box-shadow: 0 6px 16px rgba(217,138,114,0.28); }
-
-        /* ==============================
-           SLIDER
-        ============================== */
-        .slider-container { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-        .slider-container > span { font-size: 11px; }
-        .slider {
-            -webkit-appearance: none;
-            flex: 1;
-            height: 6px;
-            border-radius: 3px;
-            background: linear-gradient(90deg, #FFB3A1, #d1e0d7);
-            outline: none;
-        }
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px; height: 20px;
-            border-radius: 50%;
-            background: var(--vert-sauge);
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-        .slider::-moz-range-thumb {
-            width: 20px; height: 20px;
-            border-radius: 50%;
-            background: var(--vert-sauge);
-            cursor: pointer;
-            border: none;
-        }
-
-        /* ==============================
-           TASKS
-        ============================== */
-        .task-item {
-            background: var(--blanc);
-            padding: 10px 14px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: var(--anthracite);
-            box-shadow: 0 1px 5px rgba(0,0,0,0.04);
-        }
-        .task-item > div { display: flex; align-items: center; }
-        .checkbox {
-            width: 18px; height: 18px;
-            border: 2px solid var(--vert-sauge);
-            border-radius: 4px;
-            margin-right: 10px;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background 0.2s;
-        }
-        .checkbox.checked { background: var(--vert-sauge); }
-        .completed { text-decoration: line-through; color: #9CA3AF; }
-
-        /* ==============================
-           TIMER
-        ============================== */
-        .timer-display {
-            font-size: 42px;
-            font-weight: 700;
-            text-align: center;
-            color: var(--terracotta);
-            margin: 8px 0;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: 3px;
-        }
-
-        /* ==============================
-           PRAYER SCREEN
-        ============================== */
-        .paper-priere {
-            background: #FAF5E6;
-            border: 1px solid #f3e5ab;
-            border-radius: 14px;
-            padding: 14px;
-            border-left: 4px solid var(--terracotta);
-            margin-bottom: 14px;
-        }
-        .mood-btn-crea {
-            font-size: 22px;
-            cursor: pointer;
-            opacity: 0.4;
-            transition: all 0.2s;
-        }
-        .mood-btn-crea.active-mood { transform: scale(1.35); opacity: 1; }
-
-        .weekly-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 3px;
-            margin-top: 8px;
-        }
-        .day-cell {
-            background: rgba(255,255,255,0.6);
-            border: 1px solid #e5e0d8;
-            border-radius: 8px;
-            padding: 4px 2px;
-            text-align: center;
-        }
-        .day-cell.today { border-color: var(--terracotta); background: rgba(217,138,114,0.1); }
-        .day-label { font-size: 7px; font-weight: 700; color: var(--vert-sauge); display: block; }
-        .day-mood  { font-size: 13px; display: block; }
-
-        .canvas-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-        .canvas-toolbar .toolbar-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--terracotta);
-            letter-spacing: 0.5px;
-        }
-        .canvas-toolbar .tools { display: flex; align-items: center; gap: 6px; }
-        #color-picker {
-            width: 26px; height: 26px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            padding: 2px;
-            background: transparent;
-        }
-        #btn-clear-canvas {
-            background: #FEE2E2;
-            color: #EF4444;
-            border: none;
-            padding: 3px 8px;
-            font-size: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Lato', sans-serif;
-        }
-        #canvas-creatif {
-            background: #FFFFFF;
-            border: 2px dashed #BCCFCE;
-            border-radius: 12px;
-            cursor: crosshair;
-            touch-action: none;
-            width: 100%;
-            height: 155px;
-            display: block;
-        }
-
-        /* ==============================
-           PROGRESS / CHARTS
-        ============================== */
-        .chart-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            height: 110px;
-            border-bottom: 2px solid var(--vert-sauge);
-            margin: 14px 0;
-            gap: 6px;
-        }
-        .chart-bar {
-            flex: 1;
-            background: var(--vert-sauge);
-            border-radius: 6px 6px 0 0;
-            text-align: center;
-            color: white;
-            font-size: 9px;
-            padding-top: 5px;
-        }
-        .chart-bar.alt { background: var(--terracotta); }
-        .progress-bar-bg {
-            background: #E5E0D8;
-            border-radius: 6px;
-            height: 8px;
-            margin-top: 8px;
-        }
-        .progress-bar-fill {
-            background: var(--vert-sauge);
-            border-radius: 6px;
-            height: 8px;
-            transition: width 0.8s ease;
-        }
-
-        /* ==============================
-           BILAN
-        ============================== */
-        .boite-lacher-prise {
-            background: rgba(217,138,114,0.09);
-            border: 2px dashed var(--terracotta);
-            border-radius: 16px;
-            padding: 14px;
-        }
-        .dissolve-effect { animation: dissolve 1.2s forwards; }
-        @keyframes dissolve {
-            0%   { opacity: 1; }
-            100% { opacity: 0; height: 0; padding: 0; }
-        }
-
-        /* ==============================
-           JOURNAL
-        ============================== */
-        .journal-card {
-            border: 1px solid var(--vert-sauge);
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 12px;
-            background: #FAF9F6;
-            color: var(--anthracite);
-            line-height: 2;
-        }
-
-        /* ==============================
-           NAV BAR
-        ============================== */
-        .nav-bar {
-            width: 100%;
-            height: 60px;
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            position: absolute;
-            bottom: 0;
-            border-top: 1px solid rgba(122,154,134,0.15);
-        }
-        .dark-mode .nav-bar { background: rgba(31,41,55,0.95); }
-        .nav-item {
-            font-size: 20px;
-            cursor: pointer;
-            opacity: 0.3;
-            transition: all 0.2s;
-            padding: 8px;
-            border-radius: 10px;
-        }
-        .nav-item:hover { opacity: 0.6; transform: scale(1.05); }
-        .nav-item.active { opacity: 1; transform: scale(1.15); }
+        body { background-color: #FFF5E1; font-family: 'Lato', sans-serif; color: #4A4A4A; min-height: 100vh; padding: 1rem; }
+        .glass { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.6); border-radius: 2.5rem; }
+        .paper { background-color: #fdfaf0; border: 1px solid #faedcd; border-radius: 1.5rem; }
+        .serif { font-family: 'Playfair Display', serif; color: #1e1b4b; }
+        .handwritten { font-family: 'Great Vibes', cursive; color: #b45309; font-size: 3.5rem; }
+        .scripture { font-family: 'Delius', cursive; }
+        canvas { background: white; border: 2px dashed #cbd5e1; border-radius: 1.5rem; cursor: crosshair; touch-action: none; }
+        .mood-btn { font-size: 3rem; transition: transform 0.2s; cursor: pointer; opacity: 0.6; }
+        .active-mood { transform: scale(1.3); opacity: 1; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.4)); }
     </style>
 </head>
-<body>
+<body class="flex flex-col items-center">
 
-<!-- ===========================
-     LOGIN SCREEN
-=========================== -->
-<div id="login-screen">
-    <div class="login-card">
-        <div class="login-logo">My1Prayer</div>
-        <p class="login-tagline">VOTRE ESPACE DE SÉRÉNITÉ</p>
-        <label class="login-label">Comment vous appelez-vous ?</label>
-        <input
-            type="text"
-            id="login-name"
-            class="login-input"
-            placeholder="Votre prénom..."
-            maxlength="30"
-            autocomplete="given-name"
-            autofocus
-        >
-        <button class="login-btn" onclick="loginUser()">Commencer ma journée ✨</button>
-        <p class="login-hint">Votre prénom est sauvegardé localement, rien n'est envoyé.</p>
-    </div>
-</div>
-
-<!-- ===========================
-     PHONE APP
-=========================== -->
-<div class="phone-container" id="phone">
-
-    <!-- SCREEN 1 : Accueil -->
-    <div id="screen-1" class="screen active">
-        <h1 id="greeting-text">Bonjour 🌅</h1>
-        <p class="subtitle">Prêt pour une journée sereine ?</p>
-
-        <div class="card-zen">
-            <small style="color:var(--vert-sauge);font-weight:700;font-size:10px;letter-spacing:1px;">✨ AFFIRMATION</small>
-            <p style="font-style:italic;margin-top:7px;font-size:13px;color:var(--anthracite);">"Je lâche prise sur ce que je ne peux pas contrôler."</p>
+    <div class="max-w-5xl w-full glass p-6 md:p-12 shadow-2xl my-6">
+        
+        <div class="text-center mb-10">
+            <h1 class="handwritten">Réflexion Matinale</h1>
+            <p class="serif uppercase tracking-widest text-xs font-bold">Mon Espace Créatif My1Prayer</p>
         </div>
 
-        <div class="card-zen accent">
-            <div class="input-group" style="margin-bottom:0">
-                <label>🌿 MA MÉTÉO INTÉRIEURE</label>
-            </div>
-            <div class="slider-container">
-                <span>🤯 Stressé</span>
-                <input type="range" min="1" max="10" value="6" class="slider" id="mood-slider">
-                <span>🧘 Serein</span>
-            </div>
-            <p id="mood-value" style="text-align:center;font-size:11px;color:var(--vert-sauge);margin-top:8px;">
-                Niveau : <strong>6 / 10</strong>
-            </p>
-        </div>
-
-        <button class="btn-principal" id="btn-start-intention">Définir mon intention →</button>
-    </div>
-
-    <!-- SCREEN 2 : Focus / Timer -->
-    <div id="screen-2" class="screen">
-        <h1>Mon Focus : <span id="focus-titre" style="color:var(--terracotta);">...</span></h1>
-        <p class="subtitle">Une seule chose importante à la fois.</p>
-
-        <div class="input-group">
-            <label>OBJECTIF DU JOUR</label>
-            <input type="text" id="focus-input" class="input-text" placeholder="Ex : Finaliser le dossier...">
-        </div>
-
-        <div class="task-item">
-            <div><div class="checkbox"></div><span>Rédiger l'introduction</span></div>
-            <small style="color:var(--vert-sauge);">20 min</small>
-        </div>
-        <div class="task-item">
-            <div><div class="checkbox"></div><span>Faire mes respirations</span></div>
-            <small style="color:var(--vert-sauge);">5 min</small>
-        </div>
-
-        <div class="card-zen" style="text-align:center;margin-top:10px;">
-            <div class="timer-display" id="timer-text">25:00</div>
-            <button class="btn-principal btn-terracotta" id="btn-timer-trigger">▶ Lancer le focus</button>
-        </div>
-    </div>
-
-    <!-- SCREEN priere : Réflexion Matinale -->
-    <div id="screen-priere" class="screen">
-        <div style="text-align:center;margin-bottom:12px;">
-            <span class="handwritten" style="font-size:2rem;color:var(--terracotta);">Réflexion Matinale</span>
-            <p style="font-size:9px;color:var(--vert-sauge);letter-spacing:2px;margin-top:3px;font-weight:700;">MON ESPACE MY1PRAYER</p>
-        </div>
-
-        <div class="paper-priere">
-            <p class="scripture" style="font-style:italic;font-size:13px;text-align:center;color:var(--anthracite);">
-                "Ne vous inquiétez de rien..."
-            </p>
-            <p style="text-align:right;font-size:10px;font-weight:700;color:var(--terracotta);margin-top:6px;">Phil 4:6</p>
-        </div>
-
-        <div class="input-group">
-            <label>✍️ MA PRIÈRE</label>
-            <textarea id="prayerText" rows="3" placeholder="Seigneur..." class="scripture" style="font-size:13px;font-style:italic;"></textarea>
-        </div>
-
-        <div class="card-zen" style="padding:12px;margin-bottom:12px;">
-            <label style="font-size:10px;font-weight:700;color:var(--vert-sauge);display:block;margin-bottom:8px;letter-spacing:0.5px;">😊 HUMEUR DU JOUR</label>
-            <div style="display:flex;justify-content:space-around;margin-bottom:10px;">
-                <span class="mood-btn-crea" data-mood="🤩">🤩</span>
-                <span class="mood-btn-crea" data-mood="✨">✨</span>
-                <span class="mood-btn-crea" data-mood="💛">💛</span>
-                <span class="mood-btn-crea" data-mood="😄">😄</span>
-                <span class="mood-btn-crea" data-mood="😔">😔</span>
-            </div>
-            <div class="weekly-grid" id="weeklyHistory"></div>
-        </div>
-
-        <div class="input-group">
-            <div class="canvas-toolbar">
-                <span class="toolbar-label">🎨 ESPACE CRÉATIF</span>
-                <div class="tools">
-                    <input type="color" id="color-picker" value="#D98A72" title="Couleur">
-                    <button id="btn-clear-canvas">Effacer</button>
+        <div class="grid md:grid-cols-2 gap-8 mb-10">
+            <div class="space-y-6">
+                <div class="paper p-6 text-center shadow-sm border-l-4 border-amber-400">
+                    <p class="scripture text-lg italic text-gray-700">"Ne vous inquiétez de rien..."</p>
+                    <p class="text-right text-xs mt-2 font-bold text-amber-700">Phil 4:6</p>
+                </div>
+                <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50">
+                    <h3 class="serif font-bold uppercase text-xs mb-3 flex gap-2"><i data-lucide="pen-tool" size="18"></i> Ma Prière</h3>
+                    <textarea id="prayerText" oninput="saveData()" class="w-full h-40 bg-transparent border-none focus:ring-0 text-gray-700 scripture text-lg" placeholder="Seigneur..."></textarea>
                 </div>
             </div>
-            <canvas id="canvas-creatif"></canvas>
-            <p style="text-align:center;font-size:9px;color:var(--vert-sauge);margin-top:5px;font-style:italic;">
-                Double-cliquez pour écrire au clavier
-            </p>
-        </div>
-    </div>
 
-    <!-- SCREEN 3 : Bilan du soir -->
-    <div id="screen-3" class="screen">
-        <h1>Mon Ancrage 🌌</h1>
-        <p class="subtitle">Déposer la journée avant le repos.</p>
-
-        <div class="input-group">
-            <label>Qu'est-ce qui a bien fonctionné ?</label>
-            <textarea rows="2" placeholder="Mes réussites du jour..."></textarea>
-        </div>
-        <div class="input-group">
-            <label>Gratitude du soir</label>
-            <textarea rows="2" placeholder="Je suis reconnaissant(e) pour..."></textarea>
-        </div>
-
-        <div class="boite-lacher-prise">
-            <label style="color:var(--terracotta);font-weight:700;font-size:10px;letter-spacing:0.8px;display:block;margin-bottom:8px;">
-                🔥 LA BOÎTE À LÂCHER-PRISE
-            </label>
-            <input type="text" id="trash-input" class="input-text" placeholder="Écrivez une frustration...">
-            <button class="btn-principal btn-terracotta" style="margin-top:10px;padding:10px;" id="btn-burn-stress">
-                🔥 Brûler ce souci
-            </button>
-        </div>
-    </div>
-
-    <!-- SCREEN 4 : Progrès -->
-    <div id="screen-4" class="screen">
-        <h1>Mes Progrès 📊</h1>
-        <p class="subtitle">Indicateurs de sérénité de la semaine.</p>
-
-        <div class="card-zen">
-            <strong>Objectifs atteints : <span style="color:var(--vert-sauge);">85 %</span></strong>
-            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:85%"></div></div>
-        </div>
-        <div class="card-zen accent">
-            <strong>Sessions de focus : <span style="color:var(--terracotta);">12 cette semaine</span></strong>
-        </div>
-
-        <p style="font-size:10px;font-weight:700;color:var(--vert-sauge);letter-spacing:1px;margin-bottom:6px;">SÉRÉNITÉ — 5 DERNIERS JOURS</p>
-        <div class="chart-container">
-            <div class="chart-bar" style="height:40%;">L</div>
-            <div class="chart-bar" style="height:55%;">M</div>
-            <div class="chart-bar" style="height:75%;">M</div>
-            <div class="chart-bar alt" style="height:90%;">J</div>
-            <div class="chart-bar" style="height:62%;">V</div>
-        </div>
-    </div>
-
-    <!-- SCREEN journal : Journal Papier -->
-    <div id="screen-journal" class="screen">
-        <h2 style="text-align:center;">Mon Journal Papier</h2>
-        <div class="journal-card">
-            <p style="font-weight:700;text-align:center;color:var(--vert-sauge);margin-bottom:8px;">📖 Gabarit Journal A4</p>
-            <div style="border-bottom:1px dashed #CCC;padding-bottom:8px;margin-bottom:8px;">
-                Date : ______ / ______ / 2026
-            </div>
-            <p>[ ] Intention du matin : _______________________</p>
-            <p>[ ] Action 1 : __________________ (___ min)</p>
-            <p>[ ] Action 2 : __________________ (___ min)</p>
-            <p>[ ] Action 3 : __________________ (___ min)</p>
-            <div style="border-top:1px dashed #CCC;margin-top:10px;padding-top:10px;">
-                <p>Gratitude du soir : ________________________</p>
-                <p>Ce que je lâche : __________________________</p>
+            <div class="space-y-6">
+                <div class="p-6 bg-white/30 rounded-[2rem] border border-white/50 text-center">
+                    <h3 class="serif font-bold uppercase text-xs mb-4">Humeur & Progression</h3>
+                    <div class="flex justify-around mb-6">
+                        <span onclick="setMood('🤩', this)" class="mood-btn">🤩</span>
+                        <span onclick="setMood('✨', this)" class="mood-btn">✨</span>
+                        <span onclick="setMood('💛', this)" class="mood-btn">💛</span>
+                        <span onclick="setMood('😄', this)" class="mood-btn">😄</span>
+                        <span onclick="setMood('😔', this)" class="mood-btn">😔</span>
+                    </div>
+                    <div id="weeklyHistory" class="grid grid-cols-7 gap-2"></div>
+                </div>
             </div>
         </div>
-        <button class="btn-principal" style="background:var(--anthracite);margin-top:14px;" onclick="window.print()">
-            🖨️ Imprimer version A4
-        </button>
+
+        <div class="space-y-4">
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <h3 class="serif font-bold uppercase text-xs flex gap-2 items-center"><i data-lucide="palette" size="20"></i> Espace Créatif</h3>
+                
+                <div class="flex flex-wrap gap-3 items-center bg-white/40 p-2 rounded-3xl border border-white/60">
+                    <a href="https://nanciedee.github.io/CardDraw/" target="_blank" class="px-4 py-1.5 bg-indigo-600 text-white rounded-full text-[10px] font-bold uppercase hover:bg-indigo-700 transition flex items-center gap-2 shadow-md">
+                        <i data-lucide="layers" size="14"></i> Tirer une Carte
+                    </a>
+
+                    <div class="h-6 w-[1px] bg-indigo-200 mx-1"></div>
+
+                    <label class="cursor-pointer bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase border border-amber-200 flex items-center gap-1">
+                        <i data-lucide="image" size="14"></i> Image <input type="file" id="imageLoader" class="hidden" accept="image/*">
+                    </label>
+                    <input type="color" id="color" class="w-8 h-8 rounded-full cursor-pointer bg-transparent border-none" value="#4f46e5">
+                    <button onclick="clearCanvas()" class="px-3 py-1 bg-red-50 text-red-600 rounded-full text-[10px] font-bold uppercase border border-red-100">Effacer</button>
+                </div>
+            </div>
+            
+            <div class="relative group">
+                <canvas id="canvas" class="w-full h-[450px] shadow-inner"></canvas>
+                <div class="absolute bottom-4 right-6 text-[10px] text-gray-400 italic pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
+                    Double-cliquez pour écrire au clavier
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- NAV BAR -->
-    <div class="nav-bar" id="main-nav">
-        <span class="nav-item active" data-screen="1" title="Accueil">🌅</span>
-        <span class="nav-item"        data-screen="2" title="Focus">⏳</span>
-        <span class="nav-item"        data-screen="priere" title="Prière">🙏</span>
-        <span class="nav-item"        data-screen="3" title="Bilan">🌌</span>
-        <span class="nav-item"        data-screen="4" title="Progrès">📊</span>
-        <span class="nav-item"        data-screen="journal" title="Journal">📖</span>
-    </div>
+    <script>
+        lucide.createIcons();
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
 
-</div><!-- /phone-container -->
-
-<script>
-/* =========================================================
-   CONSTANTS & STATE
-========================================================= */
-const USER_KEY = 'my1prayer_user';
-const DATA_KEY = 'my1prayer_data';
-let journalData = {};
-try { journalData = JSON.parse(localStorage.getItem(DATA_KEY)) || {}; } catch(e) {}
-const today = new Date().toISOString().split('T')[0];
-
-/* =========================================================
-   LOGIN
-========================================================= */
-function loginUser() {
-    const nameInput = document.getElementById('login-name');
-    const name = nameInput.value.trim();
-    if (!name) {
-        nameInput.classList.add('error');
-        nameInput.placeholder = 'Veuillez entrer votre prénom...';
-        nameInput.focus();
-        setTimeout(() => nameInput.classList.remove('error'), 1500);
-        return;
-    }
-    localStorage.setItem(USER_KEY, name);
-    applyGreeting(name);
-    document.getElementById('login-screen').classList.add('hidden');
-}
-
-function applyGreeting(name) {
-    const h = new Date().getHours();
-    const greet = h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir';
-    document.getElementById('greeting-text').textContent = greet + ', ' + name + ' 🌅';
-}
-
-// Enter key on login
-document.getElementById('login-name').addEventListener('keydown', e => {
-    if (e.key === 'Enter') loginUser();
-});
-
-// Auto-login if name already stored
-const storedUser = localStorage.getItem(USER_KEY);
-if (storedUser) {
-    document.getElementById('login-screen').classList.add('hidden');
-    applyGreeting(storedUser);
-}
-
-/* =========================================================
-   SCREEN NAVIGATION
-========================================================= */
-function switchScreen(screenId, navElement) {
-    const targetEl = document.getElementById('screen-' + screenId);
-    if (!targetEl) return;
-
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    targetEl.classList.add('active');
-
-    // Nav highlight
-    if (navElement) {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        navElement.classList.add('active');
-    } else {
-        document.querySelectorAll('.nav-item').forEach(i => {
-            i.classList.remove('active');
-            if (i.getAttribute('data-screen') === String(screenId)) i.classList.add('active');
-        });
-    }
-
-    // Dark mode for bilan screen
-    const phone = document.getElementById('phone');
-    if (screenId === 3 || screenId === '3') {
-        phone.classList.add('dark-mode');
-    } else {
-        phone.classList.remove('dark-mode');
-    }
-
-    // Init canvas + reload data when switching to prayer
-    if (screenId === 'priere') {
-        setTimeout(initCanvas, 80);
-        updateHistory();
-        loadPrayer();
-    }
-}
-
-// Nav bar clicks
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function() {
-        switchScreen(this.getAttribute('data-screen'), this);
-    });
-});
-
-// "Définir mon intention" button
-document.getElementById('btn-start-intention').addEventListener('click', () => switchScreen(2));
-
-/* =========================================================
-   MOOD SLIDER (Accueil)
-========================================================= */
-document.getElementById('mood-slider').addEventListener('input', function() {
-    document.getElementById('mood-value').innerHTML =
-        'Niveau : <strong>' + this.value + ' / 10</strong>';
-});
-
-/* =========================================================
-   CHECKBOXES (Focus)
-========================================================= */
-document.querySelectorAll('.checkbox').forEach(box => {
-    box.addEventListener('click', function() {
-        this.classList.toggle('checked');
-        const label = this.nextElementSibling;
-        if (label) label.classList.toggle('completed');
-    });
-});
-
-/* =========================================================
-   FOCUS INPUT → TITLE
-========================================================= */
-document.getElementById('focus-input').addEventListener('input', function() {
-    document.getElementById('focus-titre').textContent =
-        this.value.trim() === '' ? '...' : this.value;
-});
-
-/* =========================================================
-   POMODORO TIMER
-========================================================= */
-let countdownTimer = null;
-let timeLeft = 25 * 60;
-let timerRunning = false;
-
-function formatTime(s) {
-    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
-}
-
-document.getElementById('btn-timer-trigger').addEventListener('click', function() {
-    if (timerRunning) {
-        clearInterval(countdownTimer);
-        countdownTimer = null;
-        timerRunning = false;
-        this.textContent = '▶ Reprendre';
-        this.style.background = '';
-    } else {
-        this.textContent = '⏸ Pause';
-        this.style.background = 'var(--anthracite)';
-        timerRunning = true;
-        countdownTimer = setInterval(() => {
-            if (timeLeft > 0) {
-                timeLeft--;
-                document.getElementById('timer-text').textContent = formatTime(timeLeft);
-            } else {
-                clearInterval(countdownTimer);
-                countdownTimer = null;
-                timerRunning = false;
-                this.textContent = '▶ Lancer le focus';
-                this.style.background = '';
-                timeLeft = 25 * 60;
-                document.getElementById('timer-text').textContent = '25:00';
-                alert('🎉 Session terminée ! Bien joué !');
-            }
-        }, 1000);
-    }
-});
-
-/* =========================================================
-   BURN STRESS (Bilan)
-========================================================= */
-document.getElementById('btn-burn-stress').addEventListener('click', function() {
-    const input = document.getElementById('trash-input');
-    if (!input.value.trim()) {
-        input.placeholder = 'Écrivez quelque chose d\'abord...';
-        input.focus();
-        return;
-    }
-    input.classList.add('dissolve-effect');
-    setTimeout(() => {
-        input.value = '';
-        input.classList.remove('dissolve-effect');
-        input.placeholder = 'Écrivez une frustration...';
-        alert('🕊️ Lâché ! Votre esprit est plus léger.');
-    }, 1200);
-});
-
-/* =========================================================
-   CREATIVE CANVAS (Prière)
-========================================================= */
-let canvasCrea, ctxCrea, drawingCrea = false;
-
-function initCanvas() {
-    canvasCrea = document.getElementById('canvas-creatif');
-    if (!canvasCrea) return;
-    ctxCrea = canvasCrea.getContext('2d');
-    // Set real pixel dimensions from layout size
-    canvasCrea.width  = canvasCrea.offsetWidth  || 300;
-    canvasCrea.height = canvasCrea.offsetHeight || 155;
-    ctxCrea.lineCap = 'round';
-    ctxCrea.lineJoin = 'round';
-    ctxCrea.lineWidth = 3;
-
-    // Mouse
-    canvasCrea.onmousedown = e => {
-        drawingCrea = true;
-        ctxCrea.beginPath();
-        ctxCrea.moveTo(e.offsetX, e.offsetY);
-    };
-    canvasCrea.onmousemove = e => {
-        if (!drawingCrea) return;
-        ctxCrea.strokeStyle = document.getElementById('color-picker').value;
-        ctxCrea.lineTo(e.offsetX, e.offsetY);
-        ctxCrea.stroke();
-    };
-    canvasCrea.onmouseup   = () => { drawingCrea = false; };
-    canvasCrea.onmouseleave = () => { drawingCrea = false; };
-
-    // Touch (mobile)
-    canvasCrea.ontouchstart = e => {
-        e.preventDefault();
-        const r = canvasCrea.getBoundingClientRect();
-        const t = e.touches[0];
-        drawingCrea = true;
-        ctxCrea.beginPath();
-        ctxCrea.moveTo(t.clientX - r.left, t.clientY - r.top);
-    };
-    canvasCrea.ontouchmove = e => {
-        e.preventDefault();
-        if (!drawingCrea) return;
-        const r = canvasCrea.getBoundingClientRect();
-        const t = e.touches[0];
-        ctxCrea.strokeStyle = document.getElementById('color-picker').value;
-        ctxCrea.lineTo(t.clientX - r.left, t.clientY - r.top);
-        ctxCrea.stroke();
-    };
-    canvasCrea.ontouchend = () => { drawingCrea = false; };
-
-    // Double-click to type
-    canvasCrea.ondblclick = e => {
-        const text = prompt('Écrivez votre mot :');
-        if (text) {
-            ctxCrea.font = "16px 'Delius', cursive";
-            ctxCrea.fillStyle = document.getElementById('color-picker').value;
-            ctxCrea.fillText(text, e.offsetX, e.offsetY);
+        function initCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 3;
         }
-    };
-}
 
-document.getElementById('btn-clear-canvas').addEventListener('click', () => {
-    if (ctxCrea && canvasCrea) ctxCrea.clearRect(0, 0, canvasCrea.width, canvasCrea.height);
-});
+        canvas.onmousedown = (e) => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); };
+        canvas.onmousemove = (e) => { 
+            if(drawing) { 
+                ctx.strokeStyle = document.getElementById('color').value;
+                ctx.lineTo(e.offsetX, e.offsetY); 
+                ctx.stroke(); 
+            } 
+        };
+        window.onmouseup = () => drawing = false;
 
-/* =========================================================
-   PRAYER — save / load
-========================================================= */
-function saveData() {
-    if (!journalData[today]) journalData[today] = {};
-    journalData[today].prayer = document.getElementById('prayerText').value;
-    localStorage.setItem(DATA_KEY, JSON.stringify(journalData));
-}
+        canvas.ondblclick = (e) => {
+            const text = prompt("Écrivez votre mot :");
+            if (text) {
+                ctx.font = "24px Delius, cursive";
+                ctx.fillStyle = document.getElementById('color').value;
+                ctx.fillText(text, e.offsetX, e.offsetY);
+            }
+        };
 
-function loadPrayer() {
-    const ta = document.getElementById('prayerText');
-    if (ta) ta.value = journalData[today]?.prayer || '';
-    // Restore active mood button
-    const savedMood = journalData[today]?.mood;
-    document.querySelectorAll('.mood-btn-crea').forEach(btn => {
-        btn.classList.toggle('active-mood', btn.dataset.mood === savedMood);
-    });
-}
+        document.getElementById('imageLoader').onchange = (e) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const ratio = Math.min(canvas.width / img.width, canvas.height / img.height);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, img.width, img.height, (canvas.width - img.width*ratio)/2, (canvas.height - img.height*ratio)/2, img.width*ratio, img.height*ratio);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        let journalData = JSON.parse(localStorage.getItem('my1prayer_data')) || {};
+        const today = new Date().toISOString().split('T')[0];
+
+        function saveData() {
+            if(!journalData[today]) journalData[today] = {};
+            journalData[today].prayer = document.getElementById('prayerText').value;
+            localStorage.setItem('my1prayer_data', JSON.stringify(journalData));
+        }
+
+        function setMood(mood, el) {
+            document.querySelectorAll('.mood-btn').forEach(m => m.classList.remove('active-mood'));
+            el.classList.add('active-mood');
+            if(!journalData[today]) journalData[today] = {};
+            journalData[today].mood = mood;
+            localStorage.setItem('my1prayer_data', JSON.stringify(journalData));
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const historyDiv = document.getElementById('weeklyHistory');
+            if(!historyDiv) return;
+            historyDiv.innerHTML = '';
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const dateKey = d.toISOString().split('T')[0];
+                const dayName = d.toLocaleDateString('fr-FR', { weekday: 'short' });
+                const mood = journalData[dateKey]?.mood || '•';
+                historyDiv.innerHTML += `<div class="p-2 border rounded-xl bg-white/50 text-center ${dateKey === today ? 'border-amber-400 bg-amber-50' : 'border-transparent'}"><div class="text-[8px] font-bold uppercase text-indigo-300">${dayName}</div><div class="text-lg">${mood}</div></div>`;
+            }
+        }
+
+        function clearCanvas() { ctx.clearRect(0,0,canvas.width,canvas.height); }
+        window.onload = () => { 
+            initCanvas(); 
+            updateHistory(); 
+            if(journalData[today]) {
+                document.getElementById('prayerText').value = journalData[today].prayer || '';
+            }
+        };
+        window.onresize = initCanvas;
+    </script>
+</body>
+</html>
